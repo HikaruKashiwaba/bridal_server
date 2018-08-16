@@ -1,0 +1,29 @@
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+| Domain | Method   | URI                    | Name             | Action                                                                 | Middleware   |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+|        | GET|HEAD | /                      |                  | Closure                                                                | web          |
+|        | POST     | company                |                  | App\Http\Controllers\AccountController@updateAccount                   | api          |
+|        | GET|HEAD | company                |                  | App\Http\Controllers\CompanyController@index                           | api          |
+|        | GET|HEAD | company/create         |                  | App\Http\Controllers\CompanyController@create                          | api          |
+|        | GET|HEAD | company/{id}           |                  | App\Http\Controllers\CompanyController@deleteCompany                   | api          |
+|        | PUT      | eventdate/{id}         |                  | App\Http\Controllers\FairController@updateCalendar                     | api          |
+|        | GET|HEAD | fair                   |                  | App\Http\Controllers\FairController@index                              | api          |
+|        | POST     | fair                   |                  | App\Http\Controllers\FairController@store                              | api          |
+|        | DELETE   | fair/{id}              |                  | App\Http\Controllers\FairController@deleteFairInfo                     | api          |
+|        | GET|HEAD | fair/{id}              |                  | App\Http\Controllers\FairController@getFair                            | api          |
+|        | PUT      | fair/{id}              |                  | App\Http\Controllers\FairController@updateFairInfo                     | api          |
+|        | GET|HEAD | home                   | home             | App\Http\Controllers\HomeController@index                              | web,auth     |
+|        | GET|HEAD | list/{id}              |                  | App\Http\Controllers\FairController@getFairList                        | api          |
+|        | GET|HEAD | login                  | login            | App\Http\Controllers\Auth\LoginController@showLoginForm                | web,guest    |
+|        | POST     | login                  |                  | App\Http\Controllers\Auth\LoginController@login                        | web,guest    |
+|        | POST     | logout                 | logout           | App\Http\Controllers\Auth\LoginController@logout                       | web          |
+|        | GET|HEAD | member                 |                  | App\Http\Controllers\MemberController@index                            | api          |
+|        | POST     | password/email         | password.email   | App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail  | web,guest    |
+|        | GET|HEAD | password/reset         | password.request | App\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm | web,guest    |
+|        | POST     | password/reset         |                  | App\Http\Controllers\Auth\ResetPasswordController@reset                | web,guest    |
+|        | GET|HEAD | password/reset/{token} | password.reset   | App\Http\Controllers\Auth\ResetPasswordController@showResetForm        | web,guest    |
+|        | GET|HEAD | register               | register         | App\Http\Controllers\Auth\RegisterController@showRegistrationForm      | web,guest    |
+|        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
+|        | GET|HEAD | tryLogin               |                  | App\Http\Controllers\LoginController@login                             | api          |
+|        | GET|HEAD | user                   |                  | Closure                                                                | api,auth:api |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
