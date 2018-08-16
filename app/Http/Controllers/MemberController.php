@@ -14,8 +14,9 @@ class MemberController extends Controller
      */
     public function index()
     {
-        return response(Member::all());
+        // return response(Member::all());
         // Response::json(Member::all());
+        return response()->json(['dummy' => 'dummy'], 200);
     }
 
     /**

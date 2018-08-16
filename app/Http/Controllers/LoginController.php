@@ -14,19 +14,21 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $header = $request->header('X-Api-Authorization');
 
-        $str =  base64_decode($header);
-
-        $params = explode(":", $str);
-
-        $member = Member::where('login_id', $params[0])->where('password', $params[1])->first();
-
-        if (is_null($member)) {
-            return ['errors' => array(array('code' => 'NG', 'message' => 'notFound'))];
-        } else {
-            return response()->json(['memberId' => $member->id], 200);
-        }
+        return response()->json(['code' => 'NG', 'message' => 'notFound'], 200);
+        // $header = $request->header('X-Api-Authorization');
+        //
+        // $str =  base64_decode($header);
+        //
+        // $params = explode(":", $str);
+        //
+        // $member = Member::where('login_id', $params[0])->where('password', $params[1])->first();
+        //
+        // if (is_null($member)) {
+        //     return ['errors' => array(array('code' => 'NG', 'message' => 'notFound'))];
+        // } else {
+        //     return response()->json(['memberId' => $member->id], 200);
+        // }
 
         /*
         $member = Member::find(1);
