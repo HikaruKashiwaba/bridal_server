@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 Route::get('tryLogin', 'LoginController@login');
 
+Route::post('/login', "LoginController@login");
+
 Route::get('/company', 'CompanyController@index');
 
 Route::get('/company/create', 'CompanyController@create');
@@ -27,9 +29,9 @@ Route::get('/member', 'MemberController@index');
 
 Route::get('/fair', 'FairController@index');
 //フェア一覧取得
-Route::get('list/{id}', 'FairController@getFairList');
+Route::get('fairs/{id}', 'FairController@getFairList');
 //一件のフェア情報取得
-Route::get('fair/{id}', 'FairController@getFair');
+Route::get('fairs/{id}/{fairId}', 'FairController@getFair');
 //フェア登録
 Route::post('/fair', 'FairController@store');
 //フェア更新

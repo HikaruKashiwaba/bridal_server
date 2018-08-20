@@ -22,43 +22,62 @@ class FairController extends Controller
     }
     */
 
+    const ZEXY = '1';
+    const WEDDINGPARK= '2';
+    const MYNAVI= '3';
+    const GURUNAVI= '4';
+    const MINNA= '5';
+    const RAKUTEN= '6';
+
+    const REGISTERED = '1'
+
+
     //ユーザに紐づくフェア一覧を取得する
     public function getFairList(string $id)
     {
-        // $items = Fair::where('member_id', $id)->get();
-        //
-        // return ['records' => $items];
-        //response()->json(['records' => $items], 200);
-        //return $items;
-
-        return response()->json(['records' => 'dummy'], 200);
+        $items = Fair::where('member_id', $id)->get();
+        return response()->json(['records' => $items], 200);
     }
 
     //一つのフェア情報を取得する
-    public function getFair(string $id)
+    public function getFair(string $id, string $fairId)
     {
-        // $items = FairContent::find($id);
-        //
-        // $items->fairContent = FairContent::where('fair_id', $items->id)->orderBy('order_id', 'asc')->get();
-        // //$items->fairContent = $items->fairContents;
-        //
-        // $items->fairWeddingpark = FairWeddingpark::where('fair_id', $items->id)->first();
-        // //$items->fairWeddingpark = $items->weddingpark;
-        //
-        // $items->fairMynavi = FairMynavi::where('fair_id', $items->id)->first();
-        //
-        // $items->fairGurunavi = FairGurunavi::where('fair_id', $items->id)->first();
-        //
-        // $items->fairRakuten = FairRakuten::where('fair_id', $items->id)->first();
-        //
-        // $items->fairZexy = FairZexy::where('fair_id', $items->id)->first();
-        //
-        // $items->fairMinna = FairMinna::where('fair_id', $items->id)->first();
-        //
-        // //return response()->json(['data' => $items], 200);
-        // return $items->toArray();
-        return response()->json(['data' => 'dummy'], 200);
-    }
+        //Fairからユーザと各サイト登録情報を取得する
+        $items = Fair::where('member_id', $id)->where('id', $fairId);
+        //$itemsが持つ、各サイトの登録フラグを元にフェア情報を取得する
+        //ゼクシイに登録してある場合
+        if ($items->'zexy_flag' == REGISTERED) {
+            $items->fairZexy = FairZexy::where('id', $id)->where('fair_id', $fairId);
+            $items->fairZexy->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', ZEXY);
+        }
+        //ウェディングパークに登録してある場合
+        if ($items->'weddingpark_flag' == REGISTERED) {
+            $items->fairWeddingPark = FairWeddingPark::where('id', $id)->where('fair_id', $fairId);
+            $items->fairWeddingPark->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', WEDDINGPARK);
+        }
+        //マイナビに登録してある場合
+        if ($items->'mynavi_flag' == REGISTERED) {
+            $items->fairMynavi = FairMynavi::where('id', $id)->where('fair_id', $fairId);
+            $items->fairMynavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', MYNAVI);
+        }
+        //ぐるなびに登録してある場合
+        if ($items->'gurunavi_flag' == REGISTERED) {
+            $items->fairGurunavi = FairGurunavi::where('id', $id)->where('fair_id', $fairId);
+            $items->fairGurunavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', GURUNAVI);
+        }
+        //みんなのウェディングに登録してある場合
+        if ($items->'minna_flag' == REGISTERED) {
+            $items->fairMinna = FairMinna::where('id', $id)->where('fair_id', $fairId);
+            $items->fairMinna->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', MINNA);
+        }
+        //楽天に登録してある場合
+        if ($items->'rakuten_flag' == REGISTERED) {
+            $items->fairRakuten = FairRakuten::where('id', $id)->where('fair_id', $fairId);
+            $items->fairRakuten->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', RAKUTEN);
+        }
+
+        return response()->json(['data', $items], 200);
+
 
     /**
      * フェアを登録する
