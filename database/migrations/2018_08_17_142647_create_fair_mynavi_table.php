@@ -54,9 +54,10 @@ class CreateFairMynaviTable extends Migration
             $table->string('end_hour5', 2);
             $table->string('end_minute5', 2);
             $table->char('reflect_status', 1)->notnull();
-            $table->char('del_flg', 1)->notnull();
             $table->timestamps();
             $table->primary('fair_id');
+
+            $table->softDeletes();
         });
     }
 

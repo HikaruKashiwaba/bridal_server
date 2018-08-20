@@ -14,23 +14,24 @@ class CreateFairTable extends Migration
     public function up()
     {
         Schema::create('fair', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->notnull();;
             $table->unsignedInteger('member_id')->notnull();
-            $table->string('title', 100);
-            $table->unsignedInteger('image_id');
+            $table->string('title', 100)->nullable();
+            $table->unsignedInteger('image_id')->nullable();
             $table->string('start_hour', 2)->notnull();
             $table->string('start_minute', 2)->notnull();
             $table->string('end_hour', 2)->notnull();
             $table->string('end_minute', 2)->notnull();
-            $table->char('weddingpark_flg', 1);
-            $table->char('mynavi_flg', 1);
-            $table->char('gurunavi_flg', 1);
-            $table->char('rakuten_flg', 1);
-            $table->char('zexy_flg', 1);
-            $table->char('minna_flg', 1);
+            $table->char('weddingpark_flg', 1)->nullable();
+            $table->char('mynavi_flg', 1)->nullable();;
+            $table->char('gurunavi_flg', 1)->nullable();
+            $table->char('rakuten_flg', 1)->nullable();
+            $table->char('zexy_flg', 1)->nullable();
+            $table->char('minna_flg', 1)->nullable();
             $table->char('reflect_status', 1)->notnull();
-            $table->char('del_flg', 1)->notnull();
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
