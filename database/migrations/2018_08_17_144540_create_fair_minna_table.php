@@ -16,6 +16,7 @@ class CreateFairMinnaTable extends Migration
         Schema::create('fair_minna', function (Blueprint $table) {
             $table->unsignedInteger('fair_id')->notnull();
             $table->char('disp_sub_flg', 1);
+            $table->string('event_kbn', 20);
             $table->string('description', 300);
             $table->string('benefit', 50);
             $table->char('reserve_flg', 1)->notnull();

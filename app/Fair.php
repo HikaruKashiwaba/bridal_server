@@ -28,7 +28,7 @@ class Fair extends Model
     }
 
     public function fairContents() {
-	return $this->hasMany('App\FairContent');
+	    return $this->hasMany('App\FairContent');
     }
 
     public function fairWeddingpark()

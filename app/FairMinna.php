@@ -11,6 +11,7 @@ class FairMinna extends Model
 
     protected $dates = ['deleted_at'];
     protected $table       = 'fair_minna';
+    protected $fairContent;
     //protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];
     const CREATED_AT = 'create_date';
     const UPDATED_AT = 'update_date';

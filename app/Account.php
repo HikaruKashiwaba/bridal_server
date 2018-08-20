@@ -10,7 +10,7 @@ class Account extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $table       = 'account';
+    protected $table = 'account';
     const CREATED_AT = 'create_date';
     const UPDATED_AT = 'update_date';
 
