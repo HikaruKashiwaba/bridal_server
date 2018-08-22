@@ -11,12 +11,15 @@ class FairZexy extends Model
 
     protected $dates = ['deleted_at'];
     protected $table       = 'fair_zexy';
+    protected $fairContent;
     //protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];
-    const CREATED_AT = 'create_date';
-    const UPDATED_AT = 'update_date';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
     public function fair()
     {
         return $this->belongsTo('App\Fair');
     }
+
+
 }

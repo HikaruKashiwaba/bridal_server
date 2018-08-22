@@ -33,29 +33,29 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        // DB::beginTransaction();
-        // try {
-        //
-        //     $company = new Company;
-        //     $company->name = 'ugauga';
-        //     $company->delete_flg = '1';
-        //
-        //     $company->save();
+        DB::beginTransaction();
+        try {
+
+            $company = new Company;
+            $company->name = 'ugauga';
+            $company->del_flg = '1';
+
+            $company->save();
 
             $result = [
                 'code' => 'OK',
                 'message' => 'OK'
             ];
 
-        //     DB::commit();
-        // } catch(Exception $e) {
-        //     DB::rollBack();
-        //     $result = [
-        //         'code' => 'NG',
-        //         'message' => $e->getMessage()
-        //     ];
-        //
-        // }
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            $result = [
+                'code' => 'NG',
+                'message' => $e->getMessage()
+            ];
+
+        }
         return response()->json($result, 200);
     }
 

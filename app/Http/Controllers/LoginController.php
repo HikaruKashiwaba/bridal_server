@@ -24,34 +24,6 @@ class LoginController extends Controller
         } else {
             return response()->json(['result'=>'NG'], 200);
         }
-
-
-        /*
-        $member = Member::find(1);
-
-        if (is_null($member)) {
-            return response()->json(['code' => 'NG', 'message' => 'notFound'], 200);
-        } else {
-            return response()->json(['memberId' => '1'], 200);
-        }
-        */
-
-
-        //$header = $request->header('X-Api-Authorization');
-
-        //$str =  base64_decode($header);
-
-        /*
-        if (Auth::attempt(['login_id' => $id, 'password' => $pass])) {
-            //成功
-
-        } else {
-            //失敗
-        }
-        */
-        //$user = Auth::user();
-        //$sort = $request->sort;
-        //$items =
     }
 
     /**

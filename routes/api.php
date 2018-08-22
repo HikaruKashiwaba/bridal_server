@@ -35,13 +35,15 @@ Route::get('fairs/{id}/{fairId}', 'FairController@getFair');
 //フェア登録
 Route::post('/fair', 'FairController@store');
 //フェア更新
-Route::put('fair/{id}', 'FairController@updateFairInfo');
+Route::put('fair/{id}', 'FairController@store');
 //フェア削除
 Route::delete('fair/{id}', 'FairController@deleteFairInfo');
 //開催日変更
 Route::put('eventdate/{id}', 'FairController@updateCalendar');
 //アカウント登録
 Route::post('/company', 'AccountController@updateAccount');
+
+Route::post('/test', 'FairController@test');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

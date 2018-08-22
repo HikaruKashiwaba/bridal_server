@@ -7,45 +7,65 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    public function updateAccount() {
-        DB::beginTransaction();
-        // try {
-        //
-        //     $json_count = count($params['account']);
-        //     $account = null;
-        //
-        //     //アカウント情報の更新
-        //     for($i = 0; $i < $json_count; $i++){
-        //         $account = Account::find($params['account'][$i]['id']) ?? new Account;
-        //
-        //         $account->member_id = $params['account'][$i]['memberId'];
-        //         $account->site_type = $params['account'][$i]['siteType'];
-        //         $account->login_id = $params['account'][$i]['loginId'];
-        //         $account->merchant_id = $params['account'][$i]['merchantId'];
-        //         $account->password = $params['account'][$i]['password'];
-        //         $fair_zexy->reflect_status = $params['fairZexy']['reflectStatus'];
-        //         $fair_zexy->create_user = $params['account'][$i]['memberId'];
-        //         $fair_zexy->update_user = $params['account'][$i]['memberId'];
-        //
-        //         $account->save();
-        //     }
-        //
-        //
-        //     DB::commit();
 
+    const SITE_TYPE_ARRAY = new array('Zexy', 'WeddingPark', 'Mynavi', 'Gurunavi', 'rakuten', 'Minna');
+
+
+    /*  登録ID,PW更新処理  */
+    public function updateAccount(Request $request) {
+
+        $params = json_decode(file_get_contents('php://input'), true);
+
+        try {
+            DB::beginTransaction();
+            for ($i = 0; $i < count($params['account']); $i++) {
+
+                $account = Account::where('member_id', $params['memberId'])->where('site_type', $i)->get();
+                if (is_null($account)) {
+                    $account = new Account;
+                }
+                $account->id = $params[$i]['id'];
+                $account->member_id = $params[$i]['memberId'];
+                $account->site_type = $params[$i]['siteType'];
+                $account->login_id = $params[$i]['loginId'];
+                $account->marchant_id = $params[$i]['merchantId'];
+                $account->password = $params[$i]['password'];
+
+                $account->save();
+            }
             $result = [
                 'code' => 'OK',
                 'message' => ''
             ];
-
-        // } catch(Exception $e) {
-        //     DB::rollBack();
-        //     $result = [
-        //         'code' => 'NG',
-        //         'message' => $e->getMessage()
-        //     ];
-        // }
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            $result = [
+                'code' => 'NG',
+                'message' => $e->getMessage()
+            ];
+        }
         return response()->json($result, 200);
+    }
+
+
+    /*  登録されたID,PWを画面に送信する　*/
+    public function getAccountInfo (Request $request) {
+        try {
+            DB::beginTransaction();
+
+            for ($i = 0; $i < count(SITE_TYPE_ARRAY); $i++) {
+                $account = new Account;
+                $account->siteType = Account::where('member_id', $params['memberId'])->where('site_type', $i);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $account = [
+                'result' => 'NG'
+            ];
+        }
+        return response()->json($account, 200);
     }
 
 
