@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFairWedingparkTable extends Migration
+class CreateFairWeddingparkTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFairWedingparkTable extends Migration
      */
     public function up()
     {
-        Schema::create('fair_wedingpark', function (Blueprint $table) {
+        Schema::create('fair_weddingpark', function (Blueprint $table) {
             $table->unsignedInteger('fair_id')->notnull();
             $table->string('description', 120)->nullable();
             $table->unsignedInteger('price')->nullable();
@@ -43,6 +43,6 @@ class CreateFairWedingparkTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fair_wedingpark');
+        Schema::dropIfExists('fair_weddingpark');
     }
 }
