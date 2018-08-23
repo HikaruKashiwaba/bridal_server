@@ -43,6 +43,8 @@ Route::put('eventdate/{id}', 'FairController@updateCalendar');
 //アカウント登録
 Route::post('/company', 'AccountController@updateAccount');
 
+Route::post('/company/info', 'AccountController@getAccountInfo');
+
 Route::post('/test', 'FairController@test');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

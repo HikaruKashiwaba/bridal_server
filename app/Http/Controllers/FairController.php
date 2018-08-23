@@ -71,44 +71,41 @@ class FairController extends Controller
     public function getFair(string $id, string $fairId)
     {
         //Fairからユーザと各サイト登録情報を取得する
-        $items = Fair::where('id', $id)->where('member_id', $fairId)->get();
-        // $items2 = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
-        // FairZexy::where('fair_id', $fairId)->get();
+        $items = Fair::where('id', $id)->where('member_id', $fairId)->first();
         //$itemsが持つ、各サイトの登録フラグを元にフェア情報を取得する
         //ゼクシイに登録してある場合
-        if ($items[0]->zexy_flg== self::REGISTERED) {
-            $items[0]->fairZexy = FairZexy::where('fair_id', $fairId)->get();
-            // $items[0]->append('fair_zexy')->toArray();
-            $items[0]->fairZexy->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
+        if ($items->zexy_flg== self::REGISTERED) {
+            $items->fairZexy = FairZexy::where('fair_id', $fairId)->first();
+            $items->fairZexy->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
         }
         //ウェディングパークに登録してある場合
-        if ($items[0]->weddingpark_flg == self::REGISTERED) {
-            $items[0]->fairWeddingPark = FairWeddingPark::where('fair_id', $fairId)->get();
-            $items[0]->fairWeddingPark->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
+        if ($items->weddingpark_flg == self::REGISTERED) {
+            $items->fairWeddingPark = FairWeddingPark::where('fair_id', $fairId)->first();
+            $items->fairWeddingPark->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
         }
         //マイナビに登録してある場合
-        if ($items[0]->mynavi_flg == self::REGISTERED) {
-            $items[0]->fairMynavi = FairMynavi::where('fair_id', $fairId)->get();
-            $items[0]->fairMynavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->get();
+        if ($items->mynavi_flg == self::REGISTERED) {
+            $items->fairMynavi = FairMynavi::where('fair_id', $fairId)->first();
+            $items->fairMynavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->get();
         }
         //ぐるなびに登録してある場合
-        if ($items[0]->gurunavi_flg == self::REGISTERED) {
-            $items[0]->fairGurunavi = FairGurunavi::where('fair_id', $fairId)->get();
-            $items[0]->fairGurunavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['GURUNAVI'])->get();
+        if ($items->gurunavi_flg == self::REGISTERED) {
+            $items->fairGurunavi = FairGurunavi::where('fair_id', $fairId)->first();
+            $items->fairGurunavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['GURUNAVI'])->get();
         }
         //みんなのウェディングに登録してある場合
-        if ($items[0]->minna_flg == self::REGISTERED) {
-            $items[0]->fairMinna = FairMinna::where('fair_id', $fairId)->get();
-            $items[0]->fairMinna->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
+        if ($items->minna_flg == self::REGISTERED) {
+            $items->fairMinna = FairMinna::where('fair_id', $fairId)->first();
+            $items->fairMinna->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
         }
         //楽天に登録してある場合
-        if ($items[0]->rakuten_flg == self::REGISTERED) {
-            $items[0]->fairRakuten = FairRakuten::where('fair_id', $fairId)->get();
-            $items[0]->fairRakuten->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['RAKUTEN'])->get();
+        if ($items->rakuten_flg == self::REGISTERED) {
+            $items->fairRakuten = FairRakuten::where('fair_id', $fairId)->first();
+            $items->fairRakuten->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['RAKUTEN'])->get();
         }
 
-        // return response()->json(['id' => $id, 'fair_id' => $fairId, 'data' => $items, 'data2' => $items2], 200);
-        return response()->json(['id' => $id, 'fair_id' => $fairId, 'data' => $items], 200);
+        return response()->json(['fair' => $items], 200);
+        // return response()->json(['id' => $id, 'fair_id' => $fairId, 'data' => $items], 200);
         // return response()->json(['dummy' => 'ok'], 200);
     }
 
@@ -159,7 +156,9 @@ class FairController extends Controller
                         $fair_content_before_update = FairContent::find($params['id'])
                                         ->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])
                                         ->where('order_id', '>', count($params[self::FAIR_SITE_NAME[$i]]['fair_content']))->get();
-                        $fair_content_before_update->delete();
+                        for ($i = 0; $i < count($fair_content_before_update); $i++) {
+                            $fair_content_before_update[$i]->delete();
+                        }
                     }
 
                     //FairContentのオブジェクトを取得する
@@ -168,12 +167,11 @@ class FairController extends Controller
                         $fair_content = new FairContent;
                     //更新
                     } else {
-                        $fair_content = FairContent::find($params['id'])->where('fair_id', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['fair_id']);
+                        $fair_content = FairContent::find($params['id'])->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])->first();
                     }
 
                     //個別のフェア内容の更新処理
                     for ($j = 0; $j < count($params[self::FAIR_SITE_NAME[$i]]['fair_content']); $j++) {
-                        $fair_content->fair_id = $params['id'];
                         $fair_content->site_type = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['site_type'];
                         $fair_content->order_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['order_id'];
                         $fair_content->content = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['content'];
@@ -219,20 +217,25 @@ class FairController extends Controller
                 //フェア内容を削除する場合
                 } elseif ($params[self::FAIR_FLG_NAME[$i]] == self::DELETED) {
                     $fair_content = FairContent::find($params['id'])->where('site_type', $params['fair_content'][$i]['site_type'])->get();
-                    $fair_content->delete();
+                    for ($i = 0; $i < count($fair_content); $i++) {
+                        $fair_content[$i]->delete();
+                    }
                 }
             }
+
             $fair->save();
 
+            //fair_zexyの更新
             if ($params['zexy_flg'] == self::NO_REGISTRATION) {
+            //新規登録の場合はモデルオブジェクトを取得する
             } elseif ($params['zexy_flg'] == self::NEW_REGISTER) {
                 $fair_zexy = new FairZexy;
                 $fair_zexy->created_at = $params['member_id'];
                 $fair_zexy->updated_at = $params['member_id'];
+            //更新の場合
             } else {
-                $fair_zexy = FairZexy::find($params['fair_id']);
+                $fair_zexy = FairZexy::where('fair_id', $params['fair_zexy']['fair_id'])->first();
             }
-
             if ($params['zexy_flg'] == self::NEW_REGISTER || $params['zexy_flg'] == self::UPDATE_RECORD_REGISTERED) {
                 $fair_zexy->fair_id = $params['fair_zexy']['fair_id'];
                 $fair_zexy->fair_type = $params['fair_zexy']['fair_type'];
@@ -297,7 +300,7 @@ class FairController extends Controller
                 $fair_zexy->delete();
             }
 
-
+            //fair_weddingparkの更新
             if ($params['weddingpark_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['weddingpark_flg'] == self::NEW_REGISTER) {
                 $fair_weddingpark = new FairWeddingPark;
@@ -325,10 +328,13 @@ class FairController extends Controller
                 $fair_weddingpark->reflect_status = $params['fair_weddingpark'][''];
                 $fair_weddingpark->create_user = $params['fair_weddingpark'][''];
                 $fair_weddingpark->update_user = $params['fair_weddingpark'][''];
+
+                $fair_weddingpark->save();
             } elseif ($params['weddingpark_flg'] == self::DELETED) {
                 $fair_weddingpark->delete();
             }
 
+            ////fair_mynaviの更新
             if ($params['mynavi_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['mynavi_flg'] == self::NEW_REGISTER) {
                 $fair_mynavi = new FairMynavi;
@@ -382,10 +388,13 @@ class FairController extends Controller
                 $fair_mynavi->reflect_status = $params['fair_mynavi']['reflect_status'];
                 $fair_mynavi->create_user = $params['fair_mynavi']['id'];
                 $fair_mynavi->update_user = $params['fair_mynavi']['id'];
+
+                $fair_mynavi->save();
             } elseif ($params['mynavi_flg'] == self::DELETED) {
                 $fair_mynavi->delete();
             }
 
+            //fair_gurunaviの更新
             if ($params['gurunavi_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['gurunavi_flg'] == self::NEW_REGISTER) {
                 $fair_gurunavi = new FairGurunavi;
@@ -418,10 +427,13 @@ class FairController extends Controller
                 $fair_gurunavi->reflect_status = $params['fair_gurunavi']['reflect_status'];
                 $fair_gurunavi->create_user = $params['fair_gurunavi']['create_user'];
                 $fair_gurunavi->update_user = $params['fair_gurunavi']['update_user'];
+
+                $fair_gurunavi->save();
             } elseif ($params['gurunavi_flg'] == self::DELETED) {
                 $fair_gurunavi->delete();
             }
 
+            //fair_rakutenの更新
             if ($params['rakuten_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['rakuten_flg'] == self::NEW_REGISTER) {
                 $fair_rakuten = new FairRakuten;
@@ -462,10 +474,13 @@ class FairController extends Controller
                 $fair_rakuten->reflect_status = $params['fair_rakuten']['reflect_status'];
                 $fair_rakuten->create_user = $params['fair_rakuten']['id'];
                 $fair_rakuten->update_user = $params['fair_rakuten']['id'];
+
+                $fair_rakuten->save();
             } elseif ($params['rakuten_flg'] == self::DELETED) {
                 $fair_rakuten->delete();
             }
 
+            //fair_minnaの更新
             if ($params['minna_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['minna_flg'] == self::NEW_REGISTER) {
                 $fair_minna = new FairMinna;
@@ -493,6 +508,8 @@ class FairController extends Controller
                 $fair_minna->reflect_status = $params['fair_minna']['reflect_status'];
                 $fair_minna->create_user = $params['fair_minna']['id'];
                 $fair_minna->update_user = $params['fair_minna']['id'];
+
+                $fair_minna->save();
             } elseif ($params['minna_flg'] == self::DELETED) {
                 $fair_minna->delete();
             }

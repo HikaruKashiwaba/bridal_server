@@ -14,12 +14,12 @@ class Fair extends Model
     protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    public $fairWeddingpark;
-    public $fairMynavi;
-    public $fairGurunavi;
-    public $fairRakuten;
-    public $fairZexy;
-    public $fairMinna;
+    protected $fairWeddingpark;
+    protected $fairMynavi;
+    protected $fairGurunavi;
+    protected $fairRakuten;
+    protected $fairZexy;
+    protected $fairMinna;
 
     // protected $appends = ['fair_zexy'];
     // protected $appends = ['fair_weddingpark'];

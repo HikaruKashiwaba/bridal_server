@@ -11,8 +11,15 @@ class Account extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'account';
-    const CREATED_AT = 'create_date';
-    const UPDATED_AT = 'update_date';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+
+    protected $weddingpark;
+    protected $zexy;
+    protected $rakuten;
+    protected $gurunavi;
+    protected $mynavi;
+    protected $minna;
 
     public function member()
     {
