@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Group extends Migration
+class Image extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class Group extends Migration
      */
     public function up()
     {
-        Schema::create('group', function(Blueprint $table) {
-            $table->unsignedInteger('id')->nutnull();
+        Schema::create('image', function(Blueprint $table) {
             $table->unsignedInteger('member_id')->notnull();
-            $table->string('group_name', 32)->notnull();
+            $table->unsignedInteger('file_id')->notnull();
+            $table->string('file_name', 32)->notnull();
             $table->timestamps();
 
-            $table->unique(['id', 'member_id']);
+            $table->unique(['member_id', 'file_id']);
 
             $table->softDeletes();
         });
@@ -32,6 +32,6 @@ class Group extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('group');
+        Schema::dropIfExists('image');
     }
 }

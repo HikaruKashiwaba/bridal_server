@@ -47,6 +47,16 @@ Route::post('/company/info', 'AccountController@getAccountInfo');
 
 Route::post('/test', 'FairController@test');
 
+Route::post('/group/update', 'GroupController@updateGroup');
+
+Route::post('/group', 'GroupController@show');
+
+Route::post('/upload', 'ImageController@upload');
+
+Route::get('/image/{id}/{file_id}', 'ImageController@getImage');
+
+Route::get('/album/{id}', 'ImageController@getAllImage');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

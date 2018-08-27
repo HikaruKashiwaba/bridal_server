@@ -238,8 +238,11 @@ class FairController extends Controller
             }
             if ($params['zexy_flg'] == self::NEW_REGISTER || $params['zexy_flg'] == self::UPDATE_RECORD_REGISTERED) {
                 $fair_zexy->fair_id = $params['fair_zexy']['fair_id'];
+                $fair_zexy->master_id = $params['fair_zexy']['master_id'];
                 $fair_zexy->fair_type = $params['fair_zexy']['fair_type'];
                 $fair_zexy->realtime_reserve_flg = $params['fair_zexy']['realtime_reserve_flg'];
+                $fair_zexy->required_time = $params['fair_zexy']['required_time'];
+                $fair_zexy->short_title = $params['fair_zexy']['short_title'];
                 $fair_zexy->description = $params['fair_zexy']['description'];
                 $fair_zexy->﻿multi_part_flg = $params['fair_zexy']['multipart_flg'];
                 $fair_zexy->place = $params['fair_zexy']['place'];
@@ -272,6 +275,7 @@ class FairController extends Controller
                 $fair_zexy->phone_reserve_day2 = $params['fair_zexy']['phone_reserve_day2'];
                 $fair_zexy->post_start_day = $params['fair_zexy']['post_start_day'];
                 $fair_zexy->post_end_day = $params['fair_zexy']['post_end_day'];
+                $fair_zexy->change_start_day = $params['fair_zexy']['change_start_day'];
                 $fair_zexy->part1 = $params['fair_zexy']['part1'];
                 $fair_zexy->start_hour1 = $params['fair_zexy']['start_hour1'];
                 $fair_zexy->start_minute1 = $params['fair_zexy']['start_minute1'];
@@ -312,6 +316,7 @@ class FairController extends Controller
 
             if ($params['weddingpark_flg'] == self::NEW_REGISTER || $params['weddingpark_flg'] == self::UPDATE_RECORD_REGISTERED) {
                 $fair_weddingpark->fair_id = $params['fair_weddingpark']['fair_id'];
+                $fair_weddingpark->master_id = $params['fair_weddingpark']['master_id'];
                 $fair_weddingpark->description = $params['fair_weddingpark']['description'];
                 $fair_weddingpark->price = $params['fair_weddingpark']['price'];
                 $fair_weddingpark->price_per_person = $params['fair_weddingpark']['price_per_person'];
@@ -347,6 +352,7 @@ class FairController extends Controller
             if ($params['mynavi_flg'] == self::NEW_REGISTER || $params['mynavi_flg'] == self::UPDATE_RECORD_REGISTERED) {
                 $fair_mynavi->id = $params['fair_mynavi']['id'];
                 $fair_mynavi->fair_id = $params['fair_mynavi']['fair_id'];
+                $fair_mynavi->master_id = $params['fair_mynavi']['master_id'];
                 $fair_mynavi->description = $params['fair_mynavi']['description'];
                 $fair_mynavi->reserve_way = $params['fair_mynavi']['reserve_way'];
                 $fair_mynavi->﻿multi_part_check	= $params['fair_mynavi']['multi_part_check'];
@@ -418,6 +424,7 @@ class FairController extends Controller
                 $fair_gurunavi->capacity = $params['fair_gurunavi']['capacity'];
                 $fair_gurunavi->image_description = $params['fair_gurunavi']['image_description'];
                 $fair_gurunavi->attention_point = $params['fair_gurunavi']['attention_point'];
+                $fair_gurunavi->event_kbn = $params['fair_gurunavi']['event_kbn'];
                 $fair_gurunavi->price_status = $params['fair_gurunavi']['price_status'];
                 $fair_gurunavi->price = $params['fair_gurunavi']['price'];
                 $fair_gurunavi->tax_included = $params['fair_gurunavi']['tax_included'];
@@ -543,31 +550,31 @@ class FairController extends Controller
         }
         DB::beginTransaction();
         try {
-            $fairContent = FairContent::where('fair_id', $fair->id);
+            $fairContent = FairContent::where('fair_id', $fair->id)->first();
             if (!is_null($fairContent)) {
                 $fairContent->delete();
             }
-            $fairWeddingpark = FairWeddingpark::where('fair_id', $fair->id)->get();
+            $fairWeddingpark = FairWeddingpark::where('fair_id', $fair->id)->first();
             if (!is_null($fairWeddingpark)) {
                 $fairWeddingpark->delete();
             }
-            $fairMynavi = FairMynavi::where('fair_id', $fair->id)->get();
+            $fairMynavi = FairMynavi::where('fair_id', $fair->id)->first();
             if (!is_null($fairMynavi)) {
                 $fairMynavi->delete();
             }
-            $fairGurunavi = FairGurunavi::where('fair_id', $fair->id)->get();
+            $fairGurunavi = FairGurunavi::where('fair_id', $fair->id)->first();
             if (!is_null($fairGurunavi)) {
                 $fairGurunavi->delete();
             }
-            $fairRakuten = FairRakuten::where('fair_id', $fair->id)->get();
+            $fairRakuten = FairRakuten::where('fair_id', $fair->id)->first();
             if (!is_null($fairRakuten)) {
                 $fairRakuten->delete();
             }
-            $fairZexy = FairZexy::where('fair_id', $fair->id)->get();
+            $fairZexy = FairZexy::where('fair_id', $fair->id)->first();
             if (!is_null($fairZexy)) {
                 $fairZexy->delete();
             }
-            $fairMinna = FairMinna::where('fair_id', $fair->id)->get();
+            $fairMinna = FairMinna::where('fair_id', $fair->id)->first();
             if (!is_null($fairMinna)) {
                 $fairMinna->delete();
             }

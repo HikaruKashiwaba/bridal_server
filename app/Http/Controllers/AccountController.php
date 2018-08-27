@@ -25,12 +25,14 @@ class AccountController extends Controller
 
         $params = json_decode(file_get_contents('php://input'), true);
 
+
+
         try {
             DB::beginTransaction();
 
             //zexyのID,PW管理
+            $account_zexy = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->first();
             if (array_key_exists('zexy', $params)) {
-                $account_zexy = Account::where('member_id', $params['zexy']['member_id'])->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->first();
                 //新規での登録がどうかを判断する
                 if (is_null($account_zexy)) {
                     $account_zexy = new Account;
@@ -40,11 +42,15 @@ class AccountController extends Controller
                 $account_zexy->login_id = $params['zexy']['login_id'];
                 $account_zexy->password = $params['zexy']['password'];
                 $account_zexy->save();
+            } else {
+                if (!is_null($account_zexy)) {
+                    $account_zexy->delete();
+                }
             }
 
             //weddingparkのID,PW管理
+            $account_weddingpark = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE["WEDDINGPARK"])->first();
             if (array_key_exists('weddingpark', $params)) {
-                $account_weddingpark = Account::where('member_id', $params['weddingpark']['member_id'])->where('site_type', self::FAIR_SITE_TYPE["WEDDINGPARK"])->first();
                 if (is_null($account_weddingpark)) {
                     $account_weddingpark = new Account;
                 }
@@ -53,11 +59,15 @@ class AccountController extends Controller
                 $account_weddingpark->login_id = $params['weddingpark']['login_id'];
                 $account_weddingpark->password = $params['weddingpark']['password'];
                 $account_weddingpark->save();
+            } else {
+                if (!is_null($account_weddingpark)) {
+                    $account_weddingpark->delete();
+                }
             }
 
             //mynaviのID,PW管理
+            $account_mynavi = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE["MYNAVI"])->first();
             if (array_key_exists('mynavi', $params)) {
-                $account_mynavi = Account::where('member_id', $params['mynavi']['member_id'])->where('site_type', self::FAIR_SITE_TYPE["MYNAVI"])->first();
                 if (is_null($account_mynavi)) {
                     $account_mynavi = new Account;
                 }
@@ -66,11 +76,15 @@ class AccountController extends Controller
                 $account_mynavi->login_id = $params['mynavi']['login_id'];
                 $account_mynavi->password = $params['mynavi']['password'];
                 $account_mynavi->save();
+            } else {
+                if (!is_null($account_mynavi)) {
+                    $account_mynavi->delete();
+                }
             }
 
             //gurunaviのID,PW管理
-            if (array_key_exists('gururanvi', $params)) {
-                $account_gurunavi = Account::where('member_id', $params['gurunavi']['member_id'])->where('site_type', self::FAIR_SITE_TYPE["GURUNAVI"])->first();
+            $account_gurunavi = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE["GURUNAVI"])->first();
+            if (array_key_exists('gurunavi', $params)) {
                 if (is_null($account_gurunavi)) {
                     $account_gurunavi = new Account;
                 }
@@ -80,11 +94,15 @@ class AccountController extends Controller
                 $account_gurunavi->password = $params['gurunavi']['password'];
                 $account_gurunavi->merchant_id = $params['gurunavi']['merchant_id'];
                 $account_gurunavi->save();
+            } else {
+                if (!is_null($account_gurunavi)) {
+                    $account_gurunavi->delete();
+                }
             }
 
             //rakutenのID,PW管理
+            $account_rakuten = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE["RAKUTEN"])->first();
             if (array_key_exists('rakuten', $params)) {
-                $account_rakuten = Account::where('member_id', $params['rakuten']['member_id'])->where('site_type', self::FAIR_SITE_TYPE["RAKUTEN"])->first();
                 if (is_null($account_rakuten)) {
                     $account_rakuten = new Account;
                 }
@@ -93,11 +111,15 @@ class AccountController extends Controller
                 $account_rakuten->login_id = $params['rakuten']['login_id'];
                 $account_rakuten->password = $params['rakuten']['password'];
                 $account_rakuten->save();
+            } else {
+                if (!is_null($account_rakuten)) {
+                    $account_rakuten->delete();
+                }
             }
 
             //minnaのID,PW管理
+            $account_minna = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE["MINNA"])->first();
             if (array_key_exists('minna', $params)) {
-                $account_minna = Account::where('member_id', $params['minna']['member_id'])->where('site_type', self::FAIR_SITE_TYPE["MINNA"])->first();
                 if (is_null($account_minna)) {
                     $account_minna = new Account;
                 }
@@ -106,7 +128,30 @@ class AccountController extends Controller
                 $account_minna->login_id = $params['minna']['login_id'];
                 $account_minna->password = $params['minna']['password'];
                 $account_minna->save();
+            } else {
+                if (!is_null($account_minna)) {
+                    $account_minna->delete();
+                }
             }
+
+
+
+            // for ($i = 0; $i < count($params['account_settings']); $i++) {
+            //     $account = Account::where('member_id', $params['member_id'])
+            //                         ->where('site_type', $params['account_settings'][$i]['site_type'])
+            //                         ->first();
+            //     if (is_null($account)) {
+            //         $account = new Account;
+            //     }
+            //     $account->member_id = $params['member_id'];
+            //     $account->site_type = $params['account_settings'][$i]['site_type'];
+            //     $account->login_id = $params['account_settings'][$i]['login_id'];
+            //     $account->password = $params['account_settings'][$i]['password'];
+            //     if ($params['account_settings'][$i]['site_type'] == self::FAIR_SITE_TYPE['GURUNAVI']) {
+            //         $account->merchant_id = $params['account_settings'][$i]['merchant_id'];
+            //     }
+            //     $account->save();
+            // }
 
             $result = [
                 'code' => 'OK',
@@ -130,9 +175,8 @@ class AccountController extends Controller
         try {
             $account = new Account;
             DB::beginTransaction();
-            /*---------------------------
-             * member_idの取得方法確認訂正
-             *---------------------------*/
+
+            //member_idの取得方法確認訂正
             $account->zexy = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->first(['login_id', 'password']);
             $account->weddingpark = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->first(['login_id', 'password']);
             $account->mynavi = Account::where('member_id', $params['member_id'])->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->first(['login_id', 'password']);
