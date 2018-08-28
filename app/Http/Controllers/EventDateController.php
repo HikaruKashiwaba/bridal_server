@@ -7,6 +7,7 @@ use App\EventDate;
 
 class EventDateController extends Controller
 {
+    //フェア開催日を取得する
     public function getEventDate(Request $request) {
         $fair_id_array = $request->fair_id_array;
 

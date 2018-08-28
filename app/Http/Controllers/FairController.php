@@ -543,16 +543,18 @@ class FairController extends Controller
 
     /* 「停止する」ボタン押下からのフェア削除処理  */
     public function deleteFairInfo(string $id) {
-        $fair = Fair::find($id);
+        $fair = Fair::where('member_id', $id)->first();
 
         if (is_null($fair)) {
             return response()->json(['code' => 'NG', 'message' => 'notFound'], 200);
         }
         DB::beginTransaction();
         try {
-            $fairContent = FairContent::where('fair_id', $fair->id)->first();
+            $fairContent = FairContent::where('fair_id', $fair->id)->get();
             if (!is_null($fairContent)) {
-                $fairContent->delete();
+                for ($i = 0; $i < count($fairContent); $i++) {
+                    $fairContent[$i]->delete();
+                }
             }
             $fairWeddingpark = FairWeddingpark::where('fair_id', $fair->id)->first();
             if (!is_null($fairWeddingpark)) {
