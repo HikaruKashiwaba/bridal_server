@@ -57,6 +57,8 @@ Route::get('/image/{id}/{file_id}', 'ImageController@getImage');
 
 Route::get('/album/{id}', 'ImageController@getAllImage');
 
+Route::post('/date', 'EventDateController@getEventDate');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

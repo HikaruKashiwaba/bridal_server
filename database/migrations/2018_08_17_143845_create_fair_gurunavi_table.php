@@ -23,7 +23,7 @@ class CreateFairGurunaviTable extends Migration
             $table->char('one_person_flg', 1)->nullable();
             $table->string('catch_copy', 30)->nullable();
             $table->string('description', 250)->nullable();
-            $table->char('capacity', 1)->nullable();
+            $table->string('capacity', 3)->nullable();
             $table->string('image_description', 30)->nullable();
             $table->string('attention_point', 30)->nullable();
             $table->char('price_status', 1)->nullable();

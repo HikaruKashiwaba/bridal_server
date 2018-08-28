@@ -14,11 +14,11 @@ class CreateEventDateTable extends Migration
     public function up()
     {
         Schema::create('event_date', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('fair_id');
+            $table->increments('id')->notnull();
+            $table->unsignedInteger('fair_id')->notnull();
             $table->unsignedInteger('register_id')->nullable();
             $table->char('site_type', 1)->nullable();
-            $table->string('date', 30);
+            $table->string('date', 30)->notnull();
             $table->softDeletes();
             $table->timestamps();
         });

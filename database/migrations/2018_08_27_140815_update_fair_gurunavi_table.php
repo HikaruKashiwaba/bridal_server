@@ -14,7 +14,7 @@ class UpdateFairGurunaviTable extends Migration
     public function up()
     {
         Schema::table('fair_gurunavi', function (Blueprint $table) {
-            $table->string('capacity', 3)->nullable()->change();
+            // $table->string('capacity', 3)->nullable()->change();
             $table->string('event_kbn', 20)->after('attention_point')->nullable();
         });
     }

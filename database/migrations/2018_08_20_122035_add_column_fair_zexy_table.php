@@ -27,7 +27,7 @@ class AddColumnFairZexyTable extends Migration
     public function down()
     {
         Schema::table('fair_zexy', function (Blueprint $table) {
-            $table->dropColumn('request_change_config');
+            // $table->dropColumn('request_change_config');
             $table->dropColumn('request_change_count');
         });
     }
