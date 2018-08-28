@@ -69,15 +69,7 @@ class ImageController extends Controller
 
     //画像一覧の情報を返却する
     public function getAllImage($id) {
-        // $image_all = Image::where('member_id', $id)->get();
-        // return response()->json($image_all, 200);
-
-
-
-        $sample = new array('date' => );
-        // $sample_json = ['fair_id' => 1, 'event_date' => $test_json];
-
-        return response()->json($sample_json, 200);
-        // return response()->json($test_json, 200);
+        $image_all = Image::where('member_id', $id)->get();
+        return response()->json($image_all, 200);
     }
 }
