@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
-    public function updateAccount() {
-        DB::beginTransaction();
-        try {
 
-            $json_count = count($params['account']);
+    public function updateAccount(string $memberId, Request $request) {
+        DB::beginTransaction();
+
+        try {
+            $params = $request->input('account');
+            $json_count = count($params);
             $account = null;
 
             //アカウント情報の更新
             for($i = 0; $i < $json_count; $i++){
-                $account = Account::find($params['account'][$i]['id']) ?? new Account;
+                $account = Account::firstOrNew(
+                  ['member_id' => $memberId, 'site_type' => $params[$i]['site_type']]
+                );
 
-                $account->member_id = $params['account'][$i]['memberId'];
-                $account->site_type = $params['account'][$i]['siteType'];
-                $account->login_id = $params['account'][$i]['loginId'];
-                $account->merchant_id = $params['account'][$i]['merchantId'];
-                $account->password = $params['account'][$i]['password'];
-                $fair_zexy->reflect_status = $params['fairZexy']['reflectStatus'];
-                $fair_zexy->create_user = $params['account'][$i]['memberId'];
-                $fair_zexy->update_user = $params['account'][$i]['memberId'];
-
+                $account['login_id'] = $params[$i]['login_id'];
+                $account['merchant_id'] = $params[$i]['merchant_id'];
+                $account['password'] = $params[$i]['password'];
                 $account->save();
             }
 
@@ -46,6 +46,12 @@ class AccountController extends Controller
             ];
         }
         return response()->json($result, 200);
+    }
+
+    public function getAccount(string $memberId) {
+        $items = Account::where('member_id', $memberId)->get();
+
+        return $items;
     }
 
 

@@ -25,7 +25,7 @@ class LoginController extends Controller
         if (is_null($member)) {
             return ['errors' => array(array('code' => 'NG', 'message' => 'notFound'))];
         } else {
-            return response()->json(['memberId' => $member->id], 200);
+            return response()->json(['memberId' => $member->id, 'companyId' => $member->company_id], 200);
         }
 
         /*
