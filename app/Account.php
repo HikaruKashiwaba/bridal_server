@@ -9,17 +9,9 @@ class Account extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['delete_at'];
     protected $table = 'account';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-
-    protected $weddingpark;
-    protected $zexy;
-    protected $rakuten;
-    protected $gurunavi;
-    protected $mynavi;
-    protected $minna;
+    protected $guarded = ['id'];
 
     public function member()
     {

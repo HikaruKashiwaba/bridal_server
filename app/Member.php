@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
     protected $table       = 'member';
-    protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];
-    //const CREATED_AT = 'create_date';
-    //const UPDATED_AT = 'update_date';
+    protected $guarded = ['id', 'company_id', 'create_at', 'update_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo

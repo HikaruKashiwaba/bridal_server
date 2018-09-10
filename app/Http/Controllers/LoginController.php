@@ -20,10 +20,33 @@ class LoginController extends Controller
         $member = Member::where('login_id', $params[0])->where('password', $params[1])->first();
 
         if (is_null($member)) {
-            return response()->json(['result'=>'OK', 'member'=>$member], 200);
+            return ['errors' => array(array('code' => 'NG', 'message' => 'notFound'))];
+        } else {
+            return response()->json(['memberId' => $member->id, 'companyId' => $member->company_id], 200);
+        }
+
+        /*
+        $member = Member::find(1);
+
+        if (is_null($member)) {
+            return response()->json(['code' => 'NG', 'message' => 'notFound'], 200);
+        } else {
+            return response()->json(['memberId' => '1'], 200);
+        }
+        */
+
+
+        //$header = $request->header('X-Api-Authorization');
+
+        //$str =  base64_decode($header);
+
+        /*
+        if (Auth::attempt(['login_id' => $id, 'password' => $pass])) {
+            //成功
+
         } else {
             return response()->json(['result'=>'NG'], 200);
-        }
+        }*/
     }
 
     /**

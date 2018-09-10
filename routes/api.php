@@ -41,7 +41,9 @@ Route::delete('fair/{id}', 'FairController@deleteFairInfo');
 //開催日変更
 Route::put('eventdate/{id}', 'FairController@updateCalendar');
 //アカウント登録
-Route::post('/company', 'AccountController@updateAccount');
+Route::get('/account/{memberId}', 'AccountController@getAccount');
+//アカウント登録
+Route::post('/account/{memberId}', 'AccountController@updateAccount');
 
 Route::post('/company/info', 'AccountController@getAccountInfo');
 
