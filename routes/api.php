@@ -49,9 +49,9 @@ Route::post('/company/info', 'AccountController@getAccountInfo');
 
 Route::post('/test', 'FairController@test');
 
-Route::post('/group/update', 'GroupController@updateGroup');
+Route::post('/group/{memberId}', 'GroupController@updateGroup');
 
-Route::post('/group', 'GroupController@show');
+Route::get('/group/{memberId}', 'GroupController@getGroup');
 
 Route::post('/upload', 'ImageController@upload');
 

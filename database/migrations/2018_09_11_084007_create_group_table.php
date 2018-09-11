@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Group extends Migration
+class CreateGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class Group extends Migration
      */
     public function up()
     {
-        Schema::create('group', function(Blueprint $table) {
-            $table->unsignedInteger('id')->nutnull();
-            $table->unsignedInteger('member_id')->notnull();
-            $table->string('group_name', 32)->notnull();
-            $table->timestamps();
-
-            $table->unique(['id', 'member_id']);
-
+        Schema::create('group', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('member_id')->nutnull();
+            $table->string('group_name', 32)->nutnull();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

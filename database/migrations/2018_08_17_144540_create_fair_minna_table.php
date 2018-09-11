@@ -14,7 +14,7 @@ class CreateFairMinnaTable extends Migration
     public function up()
     {
         Schema::create('fair_minna', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->char('disp_sub_flg', 1)->nullable();
             $table->string('event_kbn', 20)->nullable();
             $table->string('description', 300)->nullable();
@@ -29,10 +29,9 @@ class CreateFairMinnaTable extends Migration
             $table->string('post_time', 2)->nullable();
             $table->char('reservable_period', 1)->nullable();
             $table->char('reflect_status', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 

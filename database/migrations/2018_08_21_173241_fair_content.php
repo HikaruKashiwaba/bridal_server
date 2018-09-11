@@ -15,23 +15,23 @@ class FairContent extends Migration
     {
         Schema::create('fair_content', function(BluePrint $table) {
             $table->increments('id')->notnull();
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->char('site_type', 1)->notnull();
-            $table->unsignedInteger('order_id')->notnull();
+            $table->integer('order_id')->notnull();
             $table->char('content', 1)->nullable();
             $table->string('other_title', 100)->nullable();
             $table->char('reserve_status', 1)->nullable();
             $table->char('reserve_count', 1)->nullable();
             $table->char('reserve_unit', 1)->nullable();
             $table->char('price_status', 1)->nullable();
-            $table->unsignedInteger('price')->nullable();
+            $table->integer('price')->nullable();
             $table->string('price_per_person', 3)->nullable();
             $table->string('required_time', 3)->nullable();
             $table->string('title', 100)->nullable();
             $table->string('content_detail', 500)->nullable();
             $table->string('event_kbn1', 35)->nullable();
             $table->string('event_kbn2', 35)->nullable();
-            $table->unsignedInteger('image_id')->nullable();
+            $table->integer('image_id')->nullable();
             $table->string('start_hour1', 2)->nullable();
             $table->string('start_minute1', 2)->nullable();
             $table->string('end_hour1', 2)->nullable();
@@ -53,12 +53,8 @@ class FairContent extends Migration
             $table->string('end_hour5', 2)->nullable();
             $table->string('end_minute5', 2)->nullable();
             $table->char('reflect_status', 1)->notnull();
-            $table->unsignedInteger('create_user')->notnull();
-            $table->unsignedInteger('update_user')->notnull();
-
-            $table->timestamps();
-
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

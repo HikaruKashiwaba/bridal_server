@@ -47,7 +47,6 @@ class AccountController extends Controller
 
     public function getAccount(string $memberId) {
         $items = Account::where('member_id', $memberId)->get();
-
         return $items;
     }
 

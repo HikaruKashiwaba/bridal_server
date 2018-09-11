@@ -16,7 +16,7 @@ class CreateCompanyTable extends Migration
         Schema::create('company', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50)->notnull();
-            $table->char('del_flg', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

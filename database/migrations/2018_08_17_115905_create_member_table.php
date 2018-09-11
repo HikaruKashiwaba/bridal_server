@@ -15,10 +15,10 @@ class CreateMemberTable extends Migration
     {
         Schema::create('member', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('company_id')->notnull();
+            $table->integer('company_id')->notnull();
             $table->string('login_id', 32)->notnull();
             $table->string('password', 32)->notnull();
-            $table->char('del_flg', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

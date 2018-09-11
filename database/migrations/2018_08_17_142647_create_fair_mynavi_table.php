@@ -14,7 +14,7 @@ class CreateFairMynaviTable extends Migration
     public function up()
     {
         Schema::create('fair_mynavi', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->string('description', 500);
             $table->char('reserve_way', 1);
             $table->char('﻿multi_part_check', 1);
@@ -54,10 +54,9 @@ class CreateFairMynaviTable extends Migration
             $table->string('end_hour5', 2);
             $table->string('end_minute5', 2);
             $table->char('reflect_status', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 

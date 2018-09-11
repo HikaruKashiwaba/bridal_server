@@ -11,7 +11,7 @@ class GroupController extends Controller
     const DELETED = 1;
 
     //グループの追加登録・更新・削除を行う
-    public function updateGroup(Request $request) {
+    public function updateGroup(string $memberId, Request $request) {
         $params = json_decode(file_get_contents('php://input'), true);
         try {
             DB::beginTransaction();
@@ -58,9 +58,8 @@ class GroupController extends Controller
     }
 
     //グループ名表示
-    public function show(Request $request) {
-        $params = json_decode(file_get_contents('php://input'), true);
-        $group = Group::where('member_id', $params['member_id'])->get();
-        return response()->json($group, 200);
+    public function getGroup(string $memberId) {
+        $items = Group::where('member_id', $memberId)->get();
+        return $items;
     }
 }

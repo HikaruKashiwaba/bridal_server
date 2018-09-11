@@ -14,7 +14,7 @@ class CreateFairRakutenTable extends Migration
     public function up()
     {
         Schema::create('fair_rakuten', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->string('description', 200)->nullable();
             $table->char('net_reserve_period_day', 1)->nullable();
             $table->char('net_reserve_period_time', 1)->nullable();
@@ -40,10 +40,9 @@ class CreateFairRakutenTable extends Migration
             $table->string('start_minute5', 2)->nullable();
             $table->string('end_hour5', 2)->nullable();
             $table->string('end_minute5', 2)->nullable();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 

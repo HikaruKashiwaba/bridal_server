@@ -14,7 +14,7 @@ class UpdateFairWeddingparkTable extends Migration
     public function up()
     {
         Schema::table('fair_weddingpark', function (Blueprint $table) {
-            $table->unsignedInteger('master_id')->after('fair_id')->nullable();
+            $table->integer('master_id')->after('fair_id')->nullable();
         });
     }
 

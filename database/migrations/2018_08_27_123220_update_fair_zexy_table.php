@@ -14,7 +14,7 @@ class UpdateFairZexyTable extends Migration
     public function up()
     {
         Schema::table('fair_zexy', function (Blueprint $table) {
-            $table->unsignedInteger('master_id')->after('fair_id')->nullable();
+            $table->integer('master_id')->after('fair_id')->nullable();
             $table->string('short_title', 20)->default('')->after('required_time');
             $table->string('change_start_day', 10)->after('post_end_day')->nullable();
         });

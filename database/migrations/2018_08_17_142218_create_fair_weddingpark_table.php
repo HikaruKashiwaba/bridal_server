@@ -14,9 +14,9 @@ class CreateFairWeddingparkTable extends Migration
     public function up()
     {
         Schema::create('fair_weddingpark', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->string('description', 120)->nullable();
-            $table->unsignedInteger('price')->nullable();
+            $table->integer('price')->nullable();
             $table->string('price_per_person', 4)->nullable();
             $table->string('price_remarks', 100)->nullable();
             $table->string('pc_url', 100)->nullable();
@@ -27,12 +27,11 @@ class CreateFairWeddingparkTable extends Migration
             $table->char('phone_ga_flg', 1)->nullable();
             $table->string('required_hour', 2)->nullable();
             $table->string('required_minute', 2)->nullable();
-            $table->unsignedInteger('benefit')->nullable();
+            $table->integer('benefit')->nullable();
             $table->char('reflect_status', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 

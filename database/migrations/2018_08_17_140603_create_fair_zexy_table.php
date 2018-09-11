@@ -14,7 +14,7 @@ class CreateFairZexyTable extends Migration
     public function up()
     {
         Schema::create('fair_zexy', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->char('fair_type', 1)->notnull();
             $table->char('realtime_reserve_flg', 1)->nullable();
             $table->string('required_time', 3)->nullable();
@@ -70,10 +70,9 @@ class CreateFairZexyTable extends Migration
             $table->string('end_hour5', 2)->nullable();
             $table->string('end_minute5', 2)->nullable();
             $table->char('reflect_status', 1)->notnull();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 

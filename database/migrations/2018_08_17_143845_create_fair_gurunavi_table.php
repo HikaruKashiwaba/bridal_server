@@ -14,7 +14,7 @@ class CreateFairGurunaviTable extends Migration
     public function up()
     {
         Schema::create('fair_gurunavi', function (Blueprint $table) {
-            $table->unsignedInteger('fair_id')->notnull();
+            $table->integer('fair_id')->notnull();
             $table->char('reserve_way', 1)->nullable();
             $table->char('benefit_flg', 1)->nullable();
             $table->char('specify_time_flg', 1)->nullable();
@@ -27,15 +27,14 @@ class CreateFairGurunaviTable extends Migration
             $table->string('image_description', 30)->nullable();
             $table->string('attention_point', 30)->nullable();
             $table->char('price_status', 1)->nullable();
-            $table->unsignedInteger('price')->nullable();
+            $table->integer('price')->nullable();
             $table->char('tax_included', 1)->nullable();
             $table->char('tax_calculation', 1)->nullable();
             $table->char('counsel_type', 1)->nullable();
             $table->char('reserve_button_flg', 1)->nullable();
+            $table->softDeletes();
             $table->timestamps();
             $table->primary('fair_id');
-
-            $table->softDeletes();
         });
     }
 
