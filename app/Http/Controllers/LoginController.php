@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Member;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -18,10 +19,12 @@ class LoginController extends Controller
         $str =  base64_decode($header);
         $params = explode(":", $str);
         $member = Member::where('login_id', $params[0])->where('password', $params[1])->first();
+        Log::debug($member);
 
         if (is_null($member)) {
             return ['errors' => array(array('code' => 'NG', 'message' => 'notFound'))];
         } else {
+          Log::debug(['memberId' => $member->id, 'companyId' => $member->company_id]);
             return response()->json(['memberId' => $member->id, 'companyId' => $member->company_id], 200);
         }
 

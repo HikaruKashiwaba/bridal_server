@@ -18,6 +18,9 @@ class AccountController extends Controller
             $json_count = count($params);
             $account = null;
 
+            // 全アカウント情報を削除
+            Account::where('member_id', $memberId)->delete();
+
             //アカウント情報の更新
             for($i = 0; $i < $json_count; $i++){
                 $account = Account::firstOrNew(

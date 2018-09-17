@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Image;
 use DB;
 use File;
+use Illuminate\Support\Facades\Log;
 
 class ImageController extends Controller
 {
     //画像を受け取る
-    public function upload(Request $request) {
+    public function upload(string $memberId, Request $request) {
         //ファイルのバリデーション
         $this->validate($request, [
             'image' => [
@@ -37,39 +38,123 @@ class ImageController extends Controller
             if (!file_exists(public_path() . "/img/fair")) {
                 mkdir(public_path() . "/img/fair");
             }
-            if (!file_exists(public_path() . "/img/fair/" . $request->member_id)) {
-                mkdir(public_path() . "/img/fair/" . $request->member_id);
+            if (!file_exists(public_path() . "/img/fair/" . $memberId)) {
+                mkdir(public_path() . "/img/fair/" . $memberId);
             }
 
             //画像のパスをDBに登録する
-            $image_all = Image::where('member_id', $request->member_id)->get();
+            $image_all = Image::where('member_id', $memberId)->get();
             $image = new Image;
-            $image->member_id = $request->member_id;
-            $image->file_id = count($image_all) + 1;
+            $image->member_id = $memberId;
             $image->file_name = $new_file_name;
             $image->save();
+            Log::debug($image);
 
             //本番用ファイル置き場に移動する
-            File::move(public_path() . "/var/tmp/fair/" . $new_file_name, public_path() . "/img/fair/" . $request->member_id . "/" . $new_file_name);
+            File::move(public_path() . "/var/tmp/fair/" . $new_file_name, public_path() . "/img/fair/" . $memberId . "/" . $new_file_name);
 
-            return response()->json(['file_id' => $image->file_id, 'file_name' => $image->file_name], 200);
+            return response()->json(['id' => $image->id, 'file_name' => $image->file_name], 200);
         }
     }
 
+    //画像一覧の情報を返却する
+    public function getAllImage($memberId) {
+        $image_all = Image::where('member_id', $memberId)->get();
+        Log::debug('member_id ='.$memberId);
+        Log::debug($image_all);
+        return response()->json($image_all, 200);
+    }
+
+    //画像一覧の情報を返却する
+    public function getAllImageWithCount($memberId) {
+        $image_all = Image::where('member_id', $memberId)->get();
+        Log::debug('member_id ='.$memberId);
+
+        $count = count($image_all);
+        $response = array();
+        for ($i = 0; $i < $count; $i++) {
+          $rec = $image_all[$i];
+          $rec['fair_count'] = $image_all[$i]->fairs->count();
+          $rec['fair_content_count'] = $image_all[$i]->fairContents->count();
+          $rec['fairs'] = [];
+          $rec['fairContents'] = [];
+        }
+        //Log::debug($image_all->fairs->count());
+        //Log::debug($image_all->fairContents->count());
+        Log::debug($image_all);
+        return response()->json($image_all, 200);
+    }
+
     //個別の画像リクエストに応じて画像を取得して返す
-    public function getImage($id, $file_id) {
-        $image = Image::where('member_id', $id)->where('file_id', $file_id)->first();
+    public function getImage($memberId, $fileId) {
+        $image = Image::where('member_id', $memberId)->where('id', $fileId)->first();
         //画像がない場合
         if (count($image) == 0) {
             return response()->json(['message' => 'no images']);
         }
-        return response()->file(public_path() . '/img/fair/' . $id . '/' . $image->file_name);
+        return response()->download(public_path() . '/img/fair/' . $memberId . '/' . $image->file_name);
     }
 
+    //個別の画像リクエストに応じて画像データを更新する
+    public function updateImage($memberId, $fileId, Request $request) {
+      DB::beginTransaction();
 
-    //画像一覧の情報を返却する
-    public function getAllImage($id) {
-        $image_all = Image::where('member_id', $id)->get();
-        return response()->json($image_all, 200);
+      try {
+          $image = null;
+          Log::debug('member_id='.$memberId);
+          Log::debug('file_id='.$fileId);
+
+          //画像情報の更新
+          $image = Image::where('member_id', $memberId)->where('id', $fileId)->first();
+
+          if ($image != null) {
+            $image['image_zexy_id'] = $request->input('imageZexyId');
+            $image['image_gurunavi_id'] = $request->input('imageGurunaviId');
+            $image['image_rakuten_id'] = $request->input('imageRakutenId');
+            $image->save();
+          }
+
+          $result = [
+              'code' => 'OK',
+              'message' => ''
+          ];
+          DB::commit();
+      } catch(Exception $e) {
+          DB::rollBack();
+          $result = [
+              'code' => 'NG',
+              'message' => $e->getMessage()
+          ];
+      }
+      return response()->json($result, 200);
+    }
+
+    //個別の画像リクエストに応じて画像データを更新する
+    public function deleteImage($memberId, $fileId) {
+      DB::beginTransaction();
+
+      try {
+          $image = null;
+
+          //画像情報の更新
+          $image = Image::where('member_id', $memberId)->where('id', $fileId)->first();
+
+          if ($image != null) {
+            $image->delete();
+          }
+
+          $result = [
+              'code' => 'OK',
+              'message' => ''
+          ];
+          DB::commit();
+      } catch(Exception $e) {
+          DB::rollBack();
+          $result = [
+              'code' => 'NG',
+              'message' => $e->getMessage()
+          ];
+      }
+      return response()->json($result, 200);
     }
 }

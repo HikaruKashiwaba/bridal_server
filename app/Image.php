@@ -11,7 +11,14 @@ class Image extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'image';
+    protected $guarded = ['id'];
 
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+
+    public function fairs() {
+      return $this->hasMany('App\Fair', 'image_id');
+    }
+
+    public function fairContents() {
+	    return $this->hasMany('App\FairContent', 'image_id');
+    }
 }

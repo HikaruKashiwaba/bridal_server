@@ -53,11 +53,15 @@ Route::post('/group/{memberId}', 'GroupController@updateGroup');
 
 Route::get('/group/{memberId}', 'GroupController@getGroup');
 
-Route::post('/upload', 'ImageController@upload');
+Route::post('/images/upload/{memberId}', 'ImageController@upload');
 
-Route::get('/image/{id}/{file_id}', 'ImageController@getImage');
+Route::get('/images/{memberId}', 'ImageController@getAllImageWithCount');
 
-Route::get('/album/{id}', 'ImageController@getAllImage');
+Route::get('/images/{memberId}/{fileId}', 'ImageController@getImage');
+
+Route::post('/images/{memberId}/{fileId}', 'ImageController@updateImage');
+
+Route::delete('/images/{memberId}/{fileId}', 'ImageController@deleteImage');
 
 Route::post('/date', 'EventDateController@getEventDate');
 
