@@ -33,7 +33,7 @@ Route::get('fairs/{id}', 'FairController@getFairList');
 //一件のフェア情報取得
 Route::get('fairs/{id}/{fairId}', 'FairController@getFair');
 //フェア登録
-Route::post('/fair', 'FairController@store');
+Route::post('/fair/register/{memberId}', 'FairController@store');
 //フェア更新
 Route::put('fair/{id}', 'FairController@store');
 //フェア削除
@@ -63,7 +63,15 @@ Route::post('/images/{memberId}/{fileId}', 'ImageController@updateImage');
 
 Route::delete('/images/{memberId}/{fileId}', 'ImageController@deleteImage');
 
-Route::post('/date', 'EventDateController@getEventDate');
+Route::get('/event/fair/{memberId}', 'EventDateController@getGroupEventDate');
+
+Route::get('/event/fair/{memberId}/{groupId}', 'EventDateController@getFiarEventDate');
+
+Route::post('/event/fair/{memberId}', 'EventDateController@updateGroupEventDate');
+
+Route::post('/event/fair/{memberId}/{groupId}', 'EventDateController@updateFiarEventDate');
+
+Route::get('/holiday', 'EventDateController@getHoliday');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -12,6 +12,7 @@ use App\FairZexy;
 use App\FairMinna;
 use App\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use DB;
 
 class FairController extends Controller
@@ -72,6 +73,7 @@ class FairController extends Controller
     {
         //Fairからユーザと各サイト登録情報を取得する
         $items = Fair::where('id', $id)->where('member_id', $fairId)->first();
+        Log::debug($items);
         //$itemsが持つ、各サイトの登録フラグを元にフェア情報を取得する
         //ゼクシイに登録してある場合
         if ($items->zexy_flg== self::REGISTERED) {
@@ -122,7 +124,7 @@ class FairController extends Controller
         DB::beginTransaction();
         try {
             $params = json_decode(file_get_contents('php://input'), true);
-
+            Log::debug($params);
             //フェアの登録
             $fair = Fair::find($params['id']);
             //新規登録の場合
@@ -140,13 +142,15 @@ class FairController extends Controller
 
             //フェアの各サイト登録フラグを書き換える
             for ($i = 0; $i < count(self::FAIR_FLG_NAME); $i++) {
-                //登録なし、もしくは削除する場合
+                //登録なし、もしくは削除する場合      
                 if ($params[self::FAIR_FLG_NAME[$i]] == self::NO_REGISTRATION || $params[self::FAIR_FLG_NAME[$i]] == self::DELETED) {
                     $fair[self::FAIR_FLG_NAME[$i]] == self::NO_REGISTRATION;
                 //新規登録・登録更新処理
                 } else {
                     $fair[self::FAIR_FLG_NAME[$i]] = self::REGISTERED;
                 }
+
+                $fair->save();
 
                 //フェア内容の登録処理
                 //フェア内容の新規登録、もしくは更新の場合
@@ -171,7 +175,10 @@ class FairController extends Controller
                     }
 
                     //個別のフェア内容の更新処理
+                    Log::debug($fair['id']);
+                    Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
                     for ($j = 0; $j < count($params[self::FAIR_SITE_NAME[$i]]['fair_content']); $j++) {
+                        $fair_content->fair_id = $fair['id'];
                         $fair_content->site_type = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['site_type'];
                         $fair_content->order_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['order_id'];
                         $fair_content->content = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['content'];
@@ -223,21 +230,22 @@ class FairController extends Controller
                 }
             }
 
-            $fair->save();
+            //$fair->save();
 
             //fair_zexyの更新
             if ($params['zexy_flg'] == self::NO_REGISTRATION) {
             //新規登録の場合はモデルオブジェクトを取得する
             } elseif ($params['zexy_flg'] == self::NEW_REGISTER) {
                 $fair_zexy = new FairZexy;
-                $fair_zexy->created_at = $params['member_id'];
-                $fair_zexy->updated_at = $params['member_id'];
+                //$fair_zexy->created_at = $params['member_id'];
+                //$fair_zexy->updated_at = $params['member_id'];
             //更新の場合
             } else {
                 $fair_zexy = FairZexy::where('fair_id', $params['fair_zexy']['fair_id'])->first();
             }
             if ($params['zexy_flg'] == self::NEW_REGISTER || $params['zexy_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_zexy->fair_id = $params['fair_zexy']['fair_id'];
+                //$fair_zexy->fair_id = $params['fair_zexy']['fair_id'];
+                $fair_zexy->fair_id = $fair['id'];
                 $fair_zexy->master_id = $params['fair_zexy']['master_id'];
                 $fair_zexy->fair_type = $params['fair_zexy']['fair_type'];
                 $fair_zexy->realtime_reserve_flg = $params['fair_zexy']['realtime_reserve_flg'];
@@ -308,14 +316,15 @@ class FairController extends Controller
             if ($params['weddingpark_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['weddingpark_flg'] == self::NEW_REGISTER) {
                 $fair_weddingpark = new FairWeddingPark;
-                $fair_weddingpark->create_user = $params['member_id'];
-                $fair_weddingpark->update_user = $params['member_id'];
+                //$fair_weddingpark->create_user = $params['member_id'];
+                //$fair_weddingpark->update_user = $params['member_id'];
             } else {
                 $fair_weddingpark = FairWeddingPark::find($params['fair_id']);
             }
 
             if ($params['weddingpark_flg'] == self::NEW_REGISTER || $params['weddingpark_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_weddingpark->fair_id = $params['fair_weddingpark']['fair_id'];
+                //$fair_weddingpark->fair_id = $params['fair_weddingpark']['fair_id'];
+                $fair_weddingpark->fair_id = $fair['id'];
                 $fair_weddingpark->master_id = $params['fair_weddingpark']['master_id'];
                 $fair_weddingpark->description = $params['fair_weddingpark']['description'];
                 $fair_weddingpark->price = $params['fair_weddingpark']['price'];
@@ -330,9 +339,9 @@ class FairController extends Controller
                 $fair_weddingpark->required_hour = $params['fair_weddingpark']['required_hour'];
                 $fair_weddingpark->required_minute = $params['fair_weddingpark']['required_minute'];
                 $fair_weddingpark->benefit = $params['fair_weddingpark']['benefit'];
-                $fair_weddingpark->reflect_status = $params['fair_weddingpark'][''];
-                $fair_weddingpark->create_user = $params['fair_weddingpark'][''];
-                $fair_weddingpark->update_user = $params['fair_weddingpark'][''];
+                $fair_weddingpark->reflect_status = $params['fair_weddingpark']['reflect_status'];
+                //$fair_weddingpark->create_user = $params['fair_weddingpark'][''];
+                //$fair_weddingpark->update_user = $params['fair_weddingpark'][''];
 
                 $fair_weddingpark->save();
             } elseif ($params['weddingpark_flg'] == self::DELETED) {
@@ -343,15 +352,16 @@ class FairController extends Controller
             if ($params['mynavi_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['mynavi_flg'] == self::NEW_REGISTER) {
                 $fair_mynavi = new FairMynavi;
-                $fair_mynavi->create_user = $params['member_id'];
-                $fair_mynavi->update_user = $params['member_id'];
+                //$fair_mynavi->create_user = $params['member_id'];
+                //$fair_mynavi->update_user = $params['member_id'];
             } else {
                 $fair_mynavi = FairMynavi::find($params['fair_id']);
             }
 
             if ($params['mynavi_flg'] == self::NEW_REGISTER || $params['mynavi_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_mynavi->id = $params['fair_mynavi']['id'];
-                $fair_mynavi->fair_id = $params['fair_mynavi']['fair_id'];
+                //$fair_mynavi->id = $params['fair_mynavi']['id'];
+                //$fair_mynavi->fair_id = $params['fair_mynavi']['fair_id'];
+                $fair_mynavi->fair_id = $fair['id'];
                 $fair_mynavi->master_id = $params['fair_mynavi']['master_id'];
                 $fair_mynavi->description = $params['fair_mynavi']['description'];
                 $fair_mynavi->reserve_way = $params['fair_mynavi']['reserve_way'];
@@ -392,8 +402,8 @@ class FairController extends Controller
                 $fair_mynavi->end_hour5 = $params['fair_mynavi']['end_hour5'];
                 $fair_mynavi->end_minute5 = $params['fair_mynavi']['end_minute5'];
                 $fair_mynavi->reflect_status = $params['fair_mynavi']['reflect_status'];
-                $fair_mynavi->create_user = $params['fair_mynavi']['id'];
-                $fair_mynavi->update_user = $params['fair_mynavi']['id'];
+                //$fair_mynavi->create_user = $params['fair_mynavi']['id'];
+                //$fair_mynavi->update_user = $params['fair_mynavi']['id'];
 
                 $fair_mynavi->save();
             } elseif ($params['mynavi_flg'] == self::DELETED) {
@@ -404,15 +414,16 @@ class FairController extends Controller
             if ($params['gurunavi_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['gurunavi_flg'] == self::NEW_REGISTER) {
                 $fair_gurunavi = new FairGurunavi;
-                $fair_gurunavi->create_user = $params['member_id'];
-                $fair_gurunavi->update_user = $params['member_id'];
+                //$fair_gurunavi->create_user = $params['member_id'];
+                //$fair_gurunavi->update_user = $params['member_id'];
             } else {
                 $fair_gurunavi = FairGurunavi::find($params['fair_id']);
             }
 
             if ($params['gurunavi_flg'] == self::NEW_REGISTER || $params['gurunavi_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_gurunavi->id = $params['fair_gurunavi']['id'];
-                $fair_gurunavi->fair_id = $params['fair_gurunavi']['fair_id'];
+                //$fair_gurunavi->id = $params['fair_gurunavi']['id'];
+                //$fair_gurunavi->fair_id = $params['fair_gurunavi']['fair_id'];
+                $fair_gurunavi->fair_id = $fair['id'];
                 $fair_gurunavi->reserve_way = $params['fair_gurunavi']['reserve_way'];
                 $fair_gurunavi->benefit_flg = $params['fair_gurunavi']['benefit_flg'];
                 $fair_gurunavi->specify_time_flg = $params['fair_gurunavi']['specify_time_flg'];
@@ -431,9 +442,10 @@ class FairController extends Controller
                 $fair_gurunavi->tax_calculation = $params['fair_gurunavi']['tax_calculation'];
                 $fair_gurunavi->counsel_type = $params['fair_gurunavi']['counsel_type'];
                 $fair_gurunavi->reserve_button_flg = $params['fair_gurunavi']['reserve_button_flg'];
-                $fair_gurunavi->reflect_status = $params['fair_gurunavi']['reflect_status'];
-                $fair_gurunavi->create_user = $params['fair_gurunavi']['create_user'];
-                $fair_gurunavi->update_user = $params['fair_gurunavi']['update_user'];
+                //$fair_gurunavi->reflect_status = $params['fair_gurunavi']['reflect_status'];
+                //$fair_gurunavi->deleted_at = $params['fair_gurunavi']['deleted_at'];
+                //$fair_gurunavi->create_user = $params['fair_gurunavi']['create_user'];
+                //$fair_gurunavi->update_user = $params['fair_gurunavi']['update_user'];
 
                 $fair_gurunavi->save();
             } elseif ($params['gurunavi_flg'] == self::DELETED) {
@@ -444,15 +456,16 @@ class FairController extends Controller
             if ($params['rakuten_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['rakuten_flg'] == self::NEW_REGISTER) {
                 $fair_rakuten = new FairRakuten;
-                $fair_rakuten->create_user = $params['member_id'];
-                $fair_rakuten->update_user = $params['member_id'];
+                //$fair_rakuten->create_user = $params['member_id'];
+                //$fair_rakuten->update_user = $params['member_id'];
             } else {
                 $fair_rakuten = FairMynavi::find($params['fair_id']);
             }
 
             if ($params['rakuten_flg'] == self::NEW_REGISTER || $params['rakuten_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_rakuten->id = $params['fair_rakuten']['id'];
-                $fair_rakuten->fair_id = $params['fair_rakuten']['fair_id'];
+                //$fair_rakuten->id = $params['fair_rakuten']['id'];
+                //$fair_rakuten->fair_id = $params['fair_rakuten']['fair_id'];
+                $fair_rakuten->fair_id = $fair['id'];
                 $fair_rakuten->description = $params['fair_rakuten']['description'];
                 $fair_rakuten->net_reserve_period_day = $params['fair_rakuten']['net_reserve_period_day'];
                 $fair_rakuten->net_reserve_period_time = $params['fair_rakuten']['net_reserve_period_time'];
@@ -478,9 +491,9 @@ class FairController extends Controller
                 $fair_rakuten->start_minute5 = $params['fair_rakuten']['start_minute5'];
                 $fair_rakuten->end_hour5 = $params['fair_rakuten']['end_hour5'];
                 $fair_rakuten->end_minute5 = $params['fair_rakuten']['end_minute5'];
-                $fair_rakuten->reflect_status = $params['fair_rakuten']['reflect_status'];
-                $fair_rakuten->create_user = $params['fair_rakuten']['id'];
-                $fair_rakuten->update_user = $params['fair_rakuten']['id'];
+                //$fair_rakuten->reflect_status = $params['fair_rakuten']['reflect_status'];
+                //$fair_rakuten->create_user = $params['fair_rakuten']['id'];
+                //$fair_rakuten->update_user = $params['fair_rakuten']['id'];
 
                 $fair_rakuten->save();
             } elseif ($params['rakuten_flg'] == self::DELETED) {
@@ -491,16 +504,18 @@ class FairController extends Controller
             if ($params['minna_flg'] == self::NO_REGISTRATION) {
             } elseif ($params['minna_flg'] == self::NEW_REGISTER) {
                 $fair_minna = new FairMinna;
-                $fair_minna->create_user = $params['member_id'];
-                $fair_minna->update_user = $params['member_id'];
+                //$fair_minna->create_user = $params['member_id'];
+                //$fair_minna->update_user = $params['member_id'];
             } else {
                 $fair_minna = FairMinna::find($params['fair_id']);
             }
 
             if ($params['minna_flg'] == self::NEW_REGISTER || $params['minna_flg'] == self::UPDATE_RECORD_REGISTERED) {
-                $fair_minna->id = $params['fair_minna']['id'];
-                $fair_minna->fair_id = $params['fair_minna']['fair_id'];
+                //$fair_minna->id = $params['fair_minna']['id'];
+                //$fair_minna->fair_id = $params['fair_minna']['fair_id'];
+                $fair_minna->fair_id = $fair['id'];
                 $fair_minna->disp_sub_flg = $params['fair_minna']['disp_sub_flg'];
+                $fair_minna->event_kbn = $params['fair_minna']['event_kbn'];
                 $fair_minna->description = $params['fair_minna']['description'];
                 $fair_minna->benefit = $params['fair_minna']['benefit'];
                 $fair_minna->reserve_flg = $params['fair_minna']['reserve_flg'];
@@ -513,8 +528,8 @@ class FairController extends Controller
                 $fair_minna->post_time = $params['fair_minna']['post_time'];
                 $fair_minna->reservable_period = $params['fair_minna']['reservable_period'];
                 $fair_minna->reflect_status = $params['fair_minna']['reflect_status'];
-                $fair_minna->create_user = $params['fair_minna']['id'];
-                $fair_minna->update_user = $params['fair_minna']['id'];
+                //$fair_minna->create_user = $params['fair_minna']['id'];
+                //$fair_minna->update_user = $params['fair_minna']['id'];
 
                 $fair_minna->save();
             } elseif ($params['minna_flg'] == self::DELETED) {
