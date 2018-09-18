@@ -63,7 +63,15 @@ Route::post('/images/{memberId}/{fileId}', 'ImageController@updateImage');
 
 Route::delete('/images/{memberId}/{fileId}', 'ImageController@deleteImage');
 
-Route::post('/date', 'EventDateController@getEventDate');
+Route::get('/event/fair/{memberId}', 'EventDateController@getGroupEventDate');
+
+Route::get('/event/fair/{memberId}/{groupId}', 'EventDateController@getFiarEventDate');
+
+Route::post('/event/fair/{memberId}', 'EventDateController@updateGroupEventDate');
+
+Route::post('/event/fair/{memberId}/{groupId}', 'EventDateController@updateFiarEventDate');
+
+Route::get('/holiday', 'EventDateController@getHoliday');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

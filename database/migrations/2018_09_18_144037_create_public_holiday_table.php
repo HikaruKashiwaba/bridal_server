@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterImageTable extends Migration
+class CreatePublicHolidayTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AlterImageTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('image', function (Blueprint $table) {
-          $table->integer('member_id')->after('id')->notnull();
+        Schema::create('public_holiday', function (Blueprint $table) {
+            $table->increments('id');
+            $table->date('holiday')->notnull();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ class AlterImageTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('public_holiday');
     }
 }

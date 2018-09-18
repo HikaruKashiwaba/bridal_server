@@ -14,6 +14,7 @@ class AlterImageTable extends Migration
     public function up()
     {
       Schema::table('image', function (Blueprint $table) {
+        $table->integer('member_id')->after('id')->notnull();
         $table->string('rakuten_file_name', 100)->after('file_name')->nullable();
         $table->string('gurunavi_file_name', 100)->after('file_name')->nullable();
         $table->string('zexy_file_name', 100)->after('file_name')->nullable();
