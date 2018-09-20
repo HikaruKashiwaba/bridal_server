@@ -227,9 +227,9 @@ class FairController extends Controller
                     }
                 }
             }
-            
+
             //$fair->save();
-            
+
             //fair_zexyの更新
             if ($params['zexy_flg'] == self::NO_REGISTRATION) {
             //新規登録の場合はモデルオブジェクトを取得する

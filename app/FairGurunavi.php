@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FairGurunavi extends Model
 {
     use SoftDeletes;
-    
+
     protected $dates = ['deleted_at'];
     protected $table = 'fair_gurunavi';
     protected $fairContent;
@@ -17,7 +17,7 @@ class FairGurunavi extends Model
     //const UPDATED_AT = 'update_date';
     //const CREATED_AT = 'create_dt';
     //const UPDATED_AT = 'update_dt';
-    
+
     public function fair()
     {
         return $this->belongsTo('App\Fair');
