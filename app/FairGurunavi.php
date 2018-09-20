@@ -10,7 +10,7 @@ class FairGurunavi extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $table       = 'fair_gurunavi';
+    protected $table = 'fair_gurunavi';
     protected $fairContent;
     //protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];
     //const CREATED_AT = 'create_date';

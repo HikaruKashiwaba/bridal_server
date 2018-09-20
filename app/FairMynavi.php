@@ -10,7 +10,7 @@ class FairMynavi extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $table       = 'fair_mynavi';
+    protected $table = 'fair_mynavi';
     protected $fairContent;
     protected $primaryKey = 'fair_id';
     //protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];

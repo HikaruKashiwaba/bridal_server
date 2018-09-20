@@ -175,8 +175,6 @@ class FairController extends Controller
                     }
 
                     //個別のフェア内容の更新処理
-                    Log::debug($fair['id']);
-                    Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
                     for ($j = 0; $j < count($params[self::FAIR_SITE_NAME[$i]]['fair_content']); $j++) {
                         $fair_content->fair_id = $fair['id'];
                         $fair_content->site_type = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['site_type'];
