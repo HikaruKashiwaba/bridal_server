@@ -73,14 +73,10 @@ class ImageController extends Controller
         $count = count($image_all);
         $response = array();
         for ($i = 0; $i < $count; $i++) {
-          $rec = $image_all[$i];
-          $rec['fair_count'] = $image_all[$i]->fairs->count();
-          $rec['fair_content_count'] = $image_all[$i]->fairContents->count();
-          $rec['fairs'] = [];
-          $rec['fairContents'] = [];
+            $rec = $image_all[$i];
+            $rec['fair_count'] = $image_all[$i]->fairs()->count();
+            $rec['fair_content_count'] = $image_all[$i]->fairContents()->count();
         }
-        //Log::debug($image_all->fairs->count());
-        //Log::debug($image_all->fairContents->count());
         Log::debug($image_all);
         return response()->json($image_all, 200);
     }

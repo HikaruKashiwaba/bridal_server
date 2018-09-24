@@ -63,13 +63,13 @@ Route::post('/images/{memberId}/{fileId}', 'ImageController@updateImage');
 
 Route::delete('/images/{memberId}/{fileId}', 'ImageController@deleteImage');
 
-Route::get('/event/fair/{memberId}', 'EventDateController@getGroupEventDate');
+Route::get('/event/group/{memberId}', 'EventDateController@getGroupEventDate');
 
-Route::get('/event/fair/{memberId}/{groupId}', 'EventDateController@getFiarEventDate');
+Route::post('/event/group/{memberId}', 'EventDateController@updateGroupEventDate');
 
-Route::post('/event/fair/{memberId}', 'EventDateController@updateGroupEventDate');
+Route::get('/event/fair/{memberId}', 'EventDateController@getFairEventDate');
 
-Route::post('/event/fair/{memberId}/{groupId}', 'EventDateController@updateFiarEventDate');
+Route::post('/event/fair/{memberId}', 'EventDateController@updateFairEventDate');
 
 Route::get('/holiday', 'EventDateController@getHoliday');
 
