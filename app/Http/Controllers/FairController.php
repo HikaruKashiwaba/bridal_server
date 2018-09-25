@@ -72,39 +72,54 @@ class FairController extends Controller
     public function getFair(string $id, string $fairId)
     {
         //Fairからユーザと各サイト登録情報を取得する
-        $items = Fair::where('id', $id)->where('member_id', $fairId)->first();
+        Log::debug($id);
+        Log::debug($fairId);
+        $items = Fair::where('id', $fairId)->where('member_id', $id)->first();
         Log::debug($items);
         //$itemsが持つ、各サイトの登録フラグを元にフェア情報を取得する
         //ゼクシイに登録してある場合
         if ($items->zexy_flg== self::REGISTERED) {
-            $items->fairZexy = FairZexy::where('fair_id', $fairId)->first();
-            $items->fairZexy->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
+            //$items->fairZexy = FairZexy::where('fair_id', $fairId)->first();
+            //$items->fairZexy->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
+            $items->fair_zexy = FairZexy::where('fair_id', $fairId)->first();
+            $items->fair_zexy->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
         }
         //ウェディングパークに登録してある場合
         if ($items->weddingpark_flg == self::REGISTERED) {
-            $items->fairWeddingPark = FairWeddingPark::where('fair_id', $fairId)->first();
-            $items->fairWeddingPark->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
+            //$items->fairWeddingPark = FairWeddingPark::where('fair_id', $fairId)->first();
+            //$items->fairWeddingPark->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
+            $items->fair_weddingpark = FairWeddingPark::where('fair_id', $fairId)->first();
+            $items->fair_weddingpark->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
         }
         //マイナビに登録してある場合
         if ($items->mynavi_flg == self::REGISTERED) {
-            $items->fairMynavi = FairMynavi::where('fair_id', $fairId)->first();
-            $items->fairMynavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->get();
+            //$items->fairMynavi = FairMynavi::where('fair_id', $fairId)->first();
+            //$items->fairMynavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->get();
+            $items->fair_mynavi = FairMynavi::where('fair_id', $fairId)->first();
+            $items->fair_mynavi->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MYNAVI'])->get();
         }
         //ぐるなびに登録してある場合
         if ($items->gurunavi_flg == self::REGISTERED) {
-            $items->fairGurunavi = FairGurunavi::where('fair_id', $fairId)->first();
-            $items->fairGurunavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['GURUNAVI'])->get();
-        }
-        //みんなのウェディングに登録してある場合
-        if ($items->minna_flg == self::REGISTERED) {
-            $items->fairMinna = FairMinna::where('fair_id', $fairId)->first();
-            $items->fairMinna->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
+            //$items->fairGurunavi = FairGurunavi::where('fair_id', $fairId)->first();
+            //$items->fairGurunavi->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['GURUNAVI'])->get();
+            $items->fair_gurunavi = FairGurunavi::where('fair_id', $fairId)->first();
+            $items->fair_gurunavi->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['GURUNAVI'])->get();
         }
         //楽天に登録してある場合
         if ($items->rakuten_flg == self::REGISTERED) {
-            $items->fairRakuten = FairRakuten::where('fair_id', $fairId)->first();
-            $items->fairRakuten->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['RAKUTEN'])->get();
+            //$items->fairRakuten = FairRakuten::where('fair_id', $fairId)->first();
+            //$items->fairRakuten->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['RAKUTEN'])->get();
+            $items->fair_rakuten = FairRakuten::where('fair_id', $fairId)->first();
+            $items->fair_rakuten->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['RAKUTEN'])->get();
         }
+        //みんなのウェディングに登録してある場合
+        if ($items->minna_flg == self::REGISTERED) {
+            //$items->fairMinna = FairMinna::where('fair_id', $fairId)->first();
+            //$items->fairMinna->fairContent = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
+            $items->fair_minna = FairMinna::where('fair_id', $fairId)->first();
+            $items->fair_minna->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
+        }
+        Log::debug($items);
 
         return response()->json(['fair' => $items], 200);
         // return response()->json(['id' => $id, 'fair_id' => $fairId, 'data' => $items], 200);
@@ -193,6 +208,9 @@ class FairController extends Controller
                         $fair_content->event_kbn1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['event_kbn1'];
                         $fair_content->event_kbn2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['event_kbn2'];
                         $fair_content->image_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id'];
+                        //$fair_content->image_id1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id1'];
+                        $fair_content->image_id2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id2'];
+                        $fair_content->image_id3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id3'];
                         $fair_content->start_hour1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour1'];
                         $fair_content->start_minute1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute1'];
                         $fair_content->end_hour1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour1'];

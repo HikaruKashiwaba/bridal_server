@@ -24,6 +24,7 @@ class ImageController extends Controller
         ]);
 
         $file = $request->file('image');
+       Log::debug($file);
 
         //バリデーション突破
         if ($file->isValid([])) {
