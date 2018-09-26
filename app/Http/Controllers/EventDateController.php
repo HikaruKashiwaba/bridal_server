@@ -21,9 +21,11 @@ class EventDateController extends Controller
       $res = [];
 
       Log::debug($groups);
+      $today = date('Ymd');
 
       for ($i = 0; $i < count($groups); $i++) {
-          $event_date = GroupEventDate::where('group_id', $groups[$i]['id'])->orderBy('date')->get();
+          $event_date = GroupEventDate::where('group_id', $groups[$i]['id'])
+              ->where('date', '>=', $today)->orderBy('date')->get();
           Log::debug($event_date);
           $group_event_date = [];
           $group_event_date['group_id'] = $groups[$i]['id'];
@@ -42,6 +44,7 @@ class EventDateController extends Controller
         $groups = Group::where('member_id',  $memberId)->get();
         $res = [];
         Log::debug($groups);
+        $today = date('Ymd');
 
         for ($i = 0; $i < count($groups); $i++) {
             $group = [];
@@ -52,7 +55,8 @@ class EventDateController extends Controller
             $fairs = Fair::where('group_id', $groups[$i]['id'])->orderBy('id')->get();
             Log::debug($fairs);
             for ($j = 0; $j < count($fairs); $j++) {
-                $event_date = FairEventDate::where('fair_id', $fairs[$j]['id'])->orderBy('date')->get();
+                $event_date = FairEventDate::where('fair_id', $fairs[$j]['id'])
+                    ->where('date', '>=', $today)->orderBy('date')->get();
                 Log::debug($event_date);
 
                 $fair = [];
@@ -121,7 +125,7 @@ class EventDateController extends Controller
                 Log::debug('ログ');
 
                 if ($eventDate['id'] != null && $eventDateList[$j]['del_flg'] == '1') {
-                  // 未反映の場合のみ、del_flgが弥ので、その場合はレコードを削除
+                  // 未反映の場合のみ、del_flgがあるので、その場合はレコードを削除
                   $eventDate->delete();
 
                   for($k = 0; $k < count($fairList); $k++) {
@@ -186,12 +190,22 @@ class EventDateController extends Controller
           $json_count = count($params);
           $account = null;
           Log::debug($params);
+          $today = date('Ymd');
 
           //アカウント情報の更新
           for($i = 0; $i < $json_count; $i++){
               $groupId = $params[$i]['group_id'];
               // パラメータからグループ配下の開催日の一覧を取得
               $fairList = $params[$i]['fairs'];
+              // グループの開催日を取得する
+              $groupEventDate = GroupEventDate::where('group_id', $groupId)
+                  ->where('date', '>=', $today)->orderBy('date')->get();
+              // グループが持つフェア開催日
+              $groupEvendDate = [];
+              for($j = 0; $j < count($groupEventDate); $j++) {
+                  $groupEvendDate[$groupEventDate[$j]['date']] = '1';
+              }
+
               // ロックされたフェアが存在する日付を保持するリスト
               $lockedFairEvendDate = [];
               // グループ配下のフェアを取得する
@@ -212,21 +226,26 @@ class EventDateController extends Controller
                       Log::debug($eventDate);
                       Log::debug('ログ');
 
-                      if ($eventDate['id'] != null && $eventDateList[$k]['del_flg'] == '1') {
-                          // 未反映の場合のみ、del_flgが弥ので、その場合はレコードを削除
-                          $eventDate->delete();
-                      } else {
-                          $eventDate['representative_flg'] = $eventDateList[$k]['representative_flg'];
-                          $eventDate['reflect_flg'] = $eventDateList[$k]['reflect_flg'];
-                          $eventDate['lock_flg'] = $eventDateList[$k]['lock_flg'];
-                          $eventDate['stop_flg'] = $eventDateList[$k]['stop_flg'];
-                          $eventDate->save();
+                      $eventDate['representative_flg'] = $eventDateList[$k]['representative_flg'];
+                      $eventDate['reflect_flg'] = $eventDateList[$k]['reflect_flg'];
+                      $eventDate['stop_flg'] = $eventDateList[$k]['stop_flg'];
+                      $eventDate['del_flg'] = $eventDateList[$k]['del_flg'];
+
+                      // フェア単位では開催しないかつ、グループ単位では開催する
+                      // フェア単位では開催するかつ、グループ単位では開催しない
+                      if (($eventDate['del_flg'] == '1' && array_key_exists($eventDate['date'], $groupEvendDate))
+                              || ($eventDate['del_flg'] == '0' && !array_key_exists($eventDate['date'], $groupEvendDate))) {
+                          $eventDate['lock_flg'] = '1';
 
                           // グループ設定と違う設定をしているフェアが存在する
-                          if ($groupId != '-1' && eventDateList[$k]['lock_flg'] == '1') {
-                              $lockedFairEvendDate[$eventDateList[$k]['date']] = '';
+                          if ($groupId != '-1') {
+                            $lockedFairEvendDate[$eventDateList[$k]['date']] = '';
                           }
                       }
+                      else {
+                        $eventDate['lock_flg'] = '0';
+                      }
+                      $eventDate->save();
                   }
               }
 
@@ -236,6 +255,7 @@ class EventDateController extends Controller
                   $eventDate = GroupEventDate::firstOrNew(
                       ['member_id' => $memberId, 'group_id' => $groupId, 'date' => $eventDates[$j]]
                   );
+                  // 画面に表示する際にわかるようにフラグをセットする
                   $eventDate['lock_flg'] = '1';
                   $eventDate->save();
               }

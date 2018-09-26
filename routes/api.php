@@ -29,13 +29,13 @@ Route::get('/member', 'MemberController@index');
 
 Route::get('/fair', 'FairController@index');
 //フェア一覧取得
-Route::get('fairs/{id}', 'FairController@getFairList');
+Route::get('fairs/{memberId}', 'FairController@getFairList');
 //一件のフェア情報取得
-Route::get('fairs/{id}/{fairId}', 'FairController@getFair');
+Route::get('fairs/{memberId}/{fairId}', 'FairController@getFair');
 //フェア登録
-Route::post('/fair/register/{memberId}', 'FairController@store');
-//フェア更新
-Route::put('fair/{id}', 'FairController@store');
+Route::post('fairs/{memberId}/register', 'FairController@store');
+//一件のフェア情報取得
+Route::post('fairs/{memberId}/{fairId}', 'FairController@update');
 //フェア削除
 Route::delete('fair/{id}', 'FairController@deleteFairInfo');
 //開催日変更

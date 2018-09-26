@@ -19,4 +19,16 @@ class FairContent extends Model
     {
         return $this->belongsTo('App\Fair');
     }
+
+    public function image1() {
+        return $this->belongsTo('App\Image', 'image_id');
+    }
+
+    public function image2() {
+        return $this->belongsTo('App\Image', 'image_id2');
+    }
+
+    public function image3() {
+        return $this->belongsTo('App\Image', 'image_id3');
+    }
 }

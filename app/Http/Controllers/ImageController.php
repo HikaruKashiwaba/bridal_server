@@ -18,7 +18,7 @@ class ImageController extends Controller
                 'required',
                 'file',
                 'image',
-                'mimes:jpeg, png',
+                'mimes:jpeg',
                 // 'dimensions:min_width=120,min_height=120,max_width=400,max_height=400',
             ]
         ]);
@@ -76,7 +76,9 @@ class ImageController extends Controller
         for ($i = 0; $i < $count; $i++) {
             $rec = $image_all[$i];
             $rec['fair_count'] = $image_all[$i]->fairs()->count();
-            $rec['fair_content_count'] = $image_all[$i]->fairContents()->count();
+
+            $referCount = $image_all[$i]->fairContents()->count() + $image_all[$i]->fairContents2()->count() + $image_all[$i]->fairContents3()->count();
+            $rec['fair_content_count'] = $referCount;
         }
         Log::debug($image_all);
         return response()->json($image_all, 200);

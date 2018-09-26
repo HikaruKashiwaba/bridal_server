@@ -21,4 +21,10 @@ class Image extends Model
     public function fairContents() {
 	    return $this->hasMany('App\FairContent', 'image_id');
     }
+    public function fairContents2() {
+	    return $this->hasMany('App\FairContent', 'image_id2');
+    }
+    public function fairContents3() {
+	    return $this->hasMany('App\FairContent', 'image_id3');
+    }
 }

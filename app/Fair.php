@@ -33,6 +33,10 @@ class Fair extends Model
         return $this->belongsTo('App\Member');
     }
 
+    public function image() {
+        return $this->belongsTo('App\Image', 'image_id');
+    }
+
     public function fairContents() {
 	    return $this->hasMany('App\FairContent');
     }
