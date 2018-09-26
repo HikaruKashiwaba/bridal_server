@@ -148,6 +148,7 @@ class FairController extends Controller
             }
 
             $fair->member_id = $params['member_id'];
+            $fair->group_id = $params['group_id'];
             $fair->title = $params['title'];
             $fair->image_id = $params['image_id'];
             $fair->start_hour = $params['start_hour'];
@@ -182,15 +183,26 @@ class FairController extends Controller
 
                     //FairContentのオブジェクトを取得する
                     //新規登録
-                    if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER) {
-                        $fair_content = new FairContent;
+                    //if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER) {
+                    //    $fair_content = new FairContent;
                     //更新
-                    } else {
-                        $fair_content = FairContent::find($params['id'])->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])->first();
-                    }
+                    //} else {
+                    //    $fair_content = FairContent::find($params['id'])->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])->first();
+                    //}
+
+                    Log::debug($params[self::FAIR_FLG_NAME[$i]]);
+                    Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
 
                     //個別のフェア内容の更新処理
                     for ($j = 0; $j < count($params[self::FAIR_SITE_NAME[$i]]['fair_content']); $j++) {
+                        //新規登録
+                        if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER) {
+                           $fair_content = new FairContent;
+                        //更新
+                        } else {
+                            $fair_content = FairContent::find($params['id'])->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])->first();
+                        }
+
                         $fair_content->fair_id = $fair['id'];
                         $fair_content->site_type = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['site_type'];
                         $fair_content->order_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['order_id'];
