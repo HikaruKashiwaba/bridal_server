@@ -64,6 +64,9 @@ class FairController extends Controller
     public function getFairList(string $memberId)
     {
         $items = Fair::where('member_id', $memberId)->get();
+        for ($i = 0; $i < count($items); $i++) {
+            $items[$i]->image;
+        }
         return response()->json(['records' => $items], 200);
     }
 
@@ -189,10 +192,11 @@ class FairController extends Controller
                     //}
 
                     Log::debug($params[self::FAIR_FLG_NAME[$i]]);
-                    Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
+                    $fairContents = $params[self::FAIR_SITE_NAME[$i]]['fair_content']
+                    Log::debug(count($fairContents));
 
                     //個別のフェア内容の更新処理
-                    for ($j = 0; $j < count($params[self::FAIR_SITE_NAME[$i]]['fair_content']); $j++) {
+                    for ($j = 0; $j < count($fairContents); $j++) {
                         //新規登録
                         if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER) {
                            $fair_content = new FairContent;
@@ -202,45 +206,50 @@ class FairController extends Controller
                         }
 
                         $fair_content->fair_id = $fair['id'];
-                        $fair_content->site_type = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['site_type'];
-                        $fair_content->order_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['order_id'];
-                        $fair_content->content = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['content'];
-                        $fair_content->other_title = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['other_title'];
-                        $fair_content->reserve_status = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['reserve_status'];
-                        $fair_content->reserve_count = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['reserve_count'];
-                        $fair_content->reserve_unit = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['reserve_unit'];
-                        $fair_content->price_status = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['price_status'];
-                        $fair_content->price = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['price'];
-                        $fair_content->price_per_person = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['price_per_person'];
-                        $fair_content->required_time = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['required_time'];
-                        $fair_content->title = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['title'];
-                        $fair_content->content_detail = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['content_detail'];
-                        $fair_content->event_kbn1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['event_kbn1'];
-                        $fair_content->event_kbn2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['event_kbn2'];
-                        $fair_content->image_id = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id'];
-                        //$fair_content->image_id1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id1'];
-                        $fair_content->image_id2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id2'];
-                        $fair_content->image_id3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['image_id3'];
-                        $fair_content->start_hour1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour1'];
-                        $fair_content->start_minute1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute1'];
-                        $fair_content->end_hour1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour1'];
-                        $fair_content->end_minute1 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_minute1'];
-                        $fair_content->start_hour2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour2'];
-                        $fair_content->start_minute2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute2'];
-                        $fair_content->end_hour2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour2'];
-                        $fair_content->end_minute2 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_minute2'];
-                        $fair_content->start_hour3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour3'];
-                        $fair_content->start_minute3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute3'];
-                        $fair_content->end_hour3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour3'];
-                        $fair_content->end_minute3 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_minute3'];
-                        $fair_content->start_hour4 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour4'];
-                        $fair_content->start_minute4 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute4'];
-                        $fair_content->end_hour4 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour4'];
-                        $fair_content->end_minute4 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_minute4'];
-                        $fair_content->start_hour5 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_hour5'];
-                        $fair_content->start_minute5 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['start_minute5'];
-                        $fair_content->end_hour5 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_hour5'];
-                        $fair_content->end_minute5 = $params[self::FAIR_SITE_NAME[$i]]['fair_content'][$j]['end_minute5'];
+                        $fair_content->site_type = $fairContents[$j]['site_type'];
+                        $fair_content->order_id = $fairContents[$j]['order_id'];
+                        $fair_content->content = $fairContents[$j]['content'];
+                        $fair_content->other_title = $fairContents[$j]['other_title'];
+                        $fair_content->reserve_status = $fairContents[$j]['reserve_status'];
+                        $fair_content->reserve_count = $fairContents[$j]['reserve_count'];
+                        $fair_content->reserve_unit = $fairContents[$j]['reserve_unit'];
+                        $fair_content->price_status = $fairContents[$j]['price_status'];
+                        $fair_content->price = $fairContents[$j]['price'];
+                        $fair_content->price_per_person = $fairContents[$j]['price_per_person'];
+                        $fair_content->required_time = $fairContents[$j]['required_time'];
+                        $fair_content->title = $fairContents[$j]['title'];
+                        $fair_content->content_detail = $fairContents[$j]['content_detail'];
+                        $fair_content->event_kbn1 = $fairContents[$j]['event_kbn1'];
+                        $fair_content->event_kbn2 = $fairContents[$j]['event_kbn2'];
+                        if ($fairContents[$j]['image_id'] != 0) {
+                          $fair_content->image_id = $fairContents[$j]['image_id'];
+                        }
+                        if ($fairContents[$j]['image_id2'] != 0) {
+                          $fair_content->image_id2 = $fairContents[$j]['image_id2'];
+                        }
+                        if ($fairContents[$j]['image_id3'] != 0) {
+                          $fair_content->image_id3 = $fairContents[$j]['image_id3'];
+                        }
+                        $fair_content->start_hour1 = $fairContents[$j]['start_hour1'];
+                        $fair_content->start_minute1 = $fairContents[$j]['start_minute1'];
+                        $fair_content->end_hour1 = $fairContents[$j]['end_hour1'];
+                        $fair_content->end_minute1 = $fairContents[$j]['end_minute1'];
+                        $fair_content->start_hour2 = $fairContents[$j]['start_hour2'];
+                        $fair_content->start_minute2 = $fairContents[$j]['start_minute2'];
+                        $fair_content->end_hour2 = $fairContents[$j]['end_hour2'];
+                        $fair_content->end_minute2 = $fairContents[$j]['end_minute2'];
+                        $fair_content->start_hour3 = $fairContents[$j]['start_hour3'];
+                        $fair_content->start_minute3 = $fairContents[$j]['start_minute3'];
+                        $fair_content->end_hour3 = $fairContents[$j]['end_hour3'];
+                        $fair_content->end_minute3 = $fairContents[$j]['end_minute3'];
+                        $fair_content->start_hour4 = $fairContents[$j]['start_hour4'];
+                        $fair_content->start_minute4 = $fairContents[$j]['start_minute4'];
+                        $fair_content->end_hour4 = $fairContents[$j]['end_hour4'];
+                        $fair_content->end_minute4 = $fairContents[$j]['end_minute4'];
+                        $fair_content->start_hour5 = $fairContents[$j]['start_hour5'];
+                        $fair_content->start_minute5 = $fairContents[$j]['start_minute5'];
+                        $fair_content->end_hour5 = $fairContents[$j]['end_hour5'];
+                        $fair_content->end_minute5 = $fairContents[$j]['end_minute5'];
 
                         //オブジェクトがNULLであればそのサイトのフェア内容は存在しないということ
                         if (!is_null($fair_content)) {
@@ -669,9 +678,15 @@ class FairController extends Controller
                         $fair_content->content_detail = $fairContents[$j]['content_detail'];
                         $fair_content->event_kbn1 = $fairContents[$j]['event_kbn1'];
                         $fair_content->event_kbn2 = $fairContents[$j]['event_kbn2'];
-                        $fair_content->image_id = $fairContents[$j]['image_id'];
-                        $fair_content->image_id2 = $fairContents[$j]['image_id2'];
-                        $fair_content->image_id3 = $fairContents[$j]['image_id3'];
+                        if ($fairContents[$j]['image_id'] != 0) {
+                          $fair_content->image_id = $fairContents[$j]['image_id'];
+                        }
+                        if ($fairContents[$j]['image_id2'] != 0) {
+                          $fair_content->image_id2 = $fairContents[$j]['image_id2'];
+                        }
+                        if ($fairContents[$j]['image_id3'] != 0) {
+                          $fair_content->image_id3 = $fairContents[$j]['image_id3'];
+                        }
                         $fair_content->start_hour1 = $fairContents[$j]['start_hour1'];
                         $fair_content->start_minute1 = $fairContents[$j]['start_minute1'];
                         $fair_content->end_hour1 = $fairContents[$j]['end_hour1'];

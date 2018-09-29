@@ -31,4 +31,12 @@ class FairContent extends Model
     public function image3() {
         return $this->belongsTo('App\Image', 'image_id3');
     }
+
+    public function fairContentDivision() {
+        return $this->hasMany('App\FairContentDivision', 'fair_content_id');
+    }
+
+    public function fairContentDetail() {
+        return $this->hasMany('App\FairContentDetail', 'fair_content_id');
+    }
 }
