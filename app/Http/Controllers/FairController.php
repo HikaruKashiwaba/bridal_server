@@ -65,7 +65,11 @@ class FairController extends Controller
         $items = Fair::where('member_id', $memberId)->get();
         for ($i = 0; $i < count($items); $i++) {
             $items[$i]->image;
+            $items[$i]->fairContent;
+            $items[$i]->fairZexy;
+
         }
+        Log::debug($items[0]);
         return response()->json(['records' => $items], 200);
     }
 
@@ -74,8 +78,6 @@ class FairController extends Controller
     public function getFair(string $memberId, string $fairId)
     {
         //Fairからユーザと各サイト登録情報を取得する
-        Log::debug($memberId);
-        Log::debug($fairId);
         $fair = Fair::where('id', $fairId)->where('member_id', $memberId)->first();
         $fair->image;
         Log::debug($fair);
@@ -205,7 +207,8 @@ class FairController extends Controller
                         }
 
                         $fair_content->fair_id = $fair['id'];
-                        $fair_content->site_type = $fairContents[$j]['site_type'];
+                        //$fair_content->site_type = $fairContents[$j]['site_type'];
+                        $fair_content->site_type = '1';
                         $fair_content->order_id = $fairContents[$j]['order_id'];
                         $fair_content->content = $fairContents[$j]['content'];
                         $fair_content->other_title = $fairContents[$j]['other_title'];
