@@ -61,8 +61,7 @@ class FairController extends Controller
 
 
     /*  ユーザに紐づくフェア一覧を取得する  */
-    public function getFairList(string $memberId)
-    {
+    public function getFairList(string $memberId) {
         $items = Fair::where('member_id', $memberId)->get();
         for ($i = 0; $i < count($items); $i++) {
             $items[$i]->image;
@@ -192,7 +191,7 @@ class FairController extends Controller
                     //}
 
                     Log::debug($params[self::FAIR_FLG_NAME[$i]]);
-                    $fairContents = $params[self::FAIR_SITE_NAME[$i]]['fair_content']
+                    $fairContents = $params[self::FAIR_SITE_NAME[$i]]['fair_content'];
                     Log::debug(count($fairContents));
 
                     //個別のフェア内容の更新処理
