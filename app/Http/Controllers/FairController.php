@@ -47,8 +47,8 @@ class FairController extends Controller
         'WEDDINGPARK' => '2',
         'MYNAVI' => '3',
         'GURUNAVI' => '4',
-        'MINNA' => '5',
-        'RAKUTEN' => '6'
+        'RAKUTEN' => '5',
+        'MINNA' => '6'
     ];
 
 
@@ -207,8 +207,8 @@ class FairController extends Controller
                         }
 
                         $fair_content->fair_id = $fair['id'];
-                        //$fair_content->site_type = $fairContents[$j]['site_type'];
-                        $fair_content->site_type = '1';
+                        $fair_content->site_type = $fairContents[$j]['site_type'];
+                        //$fair_content->site_type = '1';
                         $fair_content->order_id = $fairContents[$j]['order_id'];
                         $fair_content->content = $fairContents[$j]['content'];
                         $fair_content->other_title = $fairContents[$j]['other_title'];
