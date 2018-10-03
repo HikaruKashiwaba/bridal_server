@@ -66,8 +66,24 @@ class FairController extends Controller
         for ($i = 0; $i < count($items); $i++) {
             $items[$i]->image;
             $items[$i]->fairContent;
-            $items[$i]->fairZexy;
-
+            if ($items[$i]['zexy_flg'] == '1') {
+              $items[$i]->fairZexy;
+            }
+            if ($items[$i]['weddingpark_flg'] == '1') {
+              $items[$i]->fairWeddingpark;
+            }
+            if ($items[$i]['mynavi_flg'] == '1') {
+              $items[$i]->fairMynavi;
+            }
+            if ($items[$i]['gurunavi_flg'] == '1') {
+              $items[$i]->fairGurunavi;
+            }
+            if ($items[$i]['rakuten_flg'] == '1') {
+              $items[$i]->fairRakuten;
+            }
+            if ($items[$i]['minna_flg'] == '1') {
+              $items[$i]->fairMinna;
+            }
         }
         Log::debug($items[0]);
         return response()->json(['records' => $items], 200);
@@ -84,7 +100,6 @@ class FairController extends Controller
         //$fairが持つ、各サイトの登録フラグを元にフェア情報を取得する
         //ゼクシイに登録してある場合
         if ($fair->zexy_flg== self::REGISTERED) {
-            Log::debug('開始');
             $fair->fair_zexy = FairZexy::where('fair_id', $fairId)->first();
             $fair->fair_zexy->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
             for ($i = 0; $i < count($fair->fair_zexy->fair_content); $i++) {
@@ -92,8 +107,6 @@ class FairController extends Controller
                 $fair->fair_zexy->fair_content[$i]->image2;
                 $fair->fair_zexy->fair_content[$i]->image3;
             }
-            Log::debug($fair->fair_zexy);
-            Log::debug('終了');
         }
         //ウェディングパークに登録してある場合
         if ($fair->weddingpark_flg == self::REGISTERED) {
@@ -120,6 +133,9 @@ class FairController extends Controller
             $fair->fair_minna = FairMinna::where('fair_id', $fairId)->first();
             $fair->fair_minna->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['MINNA'])->get();
         }
+        Log::debug('開催日取得');
+        $fair->fairEventDate;
+
         Log::debug($fair);
 
         return response()->json(['fair' => $fair], 200);

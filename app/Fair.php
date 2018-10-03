@@ -71,22 +71,8 @@ class Fair extends Model
         return $this->hasOne('App\FairMinna');
     }
 
-    // public function getFairZexyAttribute() {
-    //     return $this->attributes['fair_zexy'] == 'yes';
-    // }
-    // public function getFairWeddingParkAttribute() {
-    //     return $this->attributes['fair_weddingpark'] == 'yes';
-    // }
-    // public function getFairMynaviAttribute() {
-    //     return $this->attributes['fair_mynavi'] == 'yes';
-    // }
-    // public function getFairGurunaviAttribute() {
-    //     return $this->attributes['fair_gurunavi'] == 'yes';
-    // }
-    // public function getFairRakutenAttribute() {
-    //     return $this->attributes['fair_rakuten'] == 'yes';
-    // }
-    // public function getFairMinnaAttribute() {
-    //     return $this->attributes['fair_minna'] == 'yes';
-    // }
+    public function fairEventDate()
+    {
+        return $this->hasMany('App\FairEventDate', 'fair_id');
+    }
 }
