@@ -516,7 +516,7 @@ class FairController extends Controller
                 //$fair_rakuten->create_user = $params['member_id'];
                 //$fair_rakuten->update_user = $params['member_id'];
             } else {
-                $fair_rakuten = FairMynavi::find($params['fair_id']);
+                $fair_rakuten = FairRakuten::find($params['fair_id']);
             }
 
             if ($params['rakuten_flg'] == self::NEW_REGISTER || $params['rakuten_flg'] == self::UPDATE_RECORD_REGISTERED) {
@@ -919,7 +919,7 @@ class FairController extends Controller
             }
 
             //fair_rakutenの更新
-            $fair_rakuten = FairMynavi::firstOrNew(['fair_id' => $fair['id']]);
+            $fair_rakuten = FairRakuten::firstOrNew(['fair_id' => $fair['id']]);
             if ($params['rakuten_flg'] == self::NEW_REGISTER || $params['rakuten_flg'] == self::UPDATE_RECORD_REGISTERED) {
                 $fair_rakuten->description = $params['fair_rakuten']['description'];
                 $fair_rakuten->net_reserve_period_day = $params['fair_rakuten']['net_reserve_period_day'];
