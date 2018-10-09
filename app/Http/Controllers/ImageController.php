@@ -89,7 +89,7 @@ class ImageController extends Controller
     public function getImage($memberId, $fileId) {
         $image = Image::where('member_id', $memberId)->where('id', $fileId)->first();
         //画像がない場合
-        if (count($image) == 0) {
+        if ($image == null) {
             return response()->json(['message' => 'no images']);
         }
         return response()->download(public_path() . '/img/fair/' . $memberId . '/' . $image->file_name);
