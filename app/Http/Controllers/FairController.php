@@ -112,6 +112,9 @@ class FairController extends Controller
         if ($fair->weddingpark_flg == self::REGISTERED) {
             $fair->fair_weddingpark = FairWeddingPark::where('fair_id', $fairId)->first();
             $fair->fair_weddingpark->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
+            for ($i = 0; $i < count($fair->fair_weddingpark->fair_content); $i++) {
+                $fair->fair_weddingpark->fair_content[$i]->image1;
+            }
         }
         //マイナビに登録してある場合
         if ($fair->mynavi_flg == self::REGISTERED) {
