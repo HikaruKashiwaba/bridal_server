@@ -22,4 +22,8 @@ class FairZexy extends Model
     {
         return $this->belongsTo('App\Fair');
     }
+    public function attentionPointImage() {
+        return $this->belongsTo('App\Image', 'attention_point_image_id');
+    }
+
 }
