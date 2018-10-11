@@ -101,6 +101,7 @@ class FairController extends Controller
         //ゼクシイに登録してある場合
         if ($fair->zexy_flg== self::REGISTERED) {
             $fair->fair_zexy = FairZexy::where('fair_id', $fairId)->first();
+            $fair->fair_zexy->attentionPointImage;
             $fair->fair_zexy->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['ZEXY'])->get();
             for ($i = 0; $i < count($fair->fair_zexy->fair_content); $i++) {
                 $fair->fair_zexy->fair_content[$i]->image1;
@@ -112,6 +113,9 @@ class FairController extends Controller
         if ($fair->weddingpark_flg == self::REGISTERED) {
             $fair->fair_weddingpark = FairWeddingPark::where('fair_id', $fairId)->first();
             $fair->fair_weddingpark->fair_content = FairContent::where('fair_id', $fairId)->where('site_type', self::FAIR_SITE_TYPE['WEDDINGPARK'])->get();
+            for ($i = 0; $i < count($fair->fair_weddingpark->fair_content); $i++) {
+                $fair->fair_weddingpark->fair_content[$i]->image1;
+            }
         }
         //マイナビに登録してある場合
         if ($fair->mynavi_flg == self::REGISTERED) {
@@ -347,6 +351,7 @@ class FairController extends Controller
                 $fair_zexy->attention_point	= $params['fair_zexy']['attention_point'];
                 $fair_zexy->attention_point_staff = $params['fair_zexy']['attention_point_staff'];
                 $fair_zexy->attention_point_staff_job = $params['fair_zexy']['attention_point_staff_job'];
+                $fair_zexy->attention_point_image_id = $params['fair_zexy']['attention_point_image_id'];
                 $fair_zexy->question = $params['fair_zexy']['question'];
                 $fair_zexy->required_question_flg = $params['fair_zexy']['required_question_flg'];
                 $fair_zexy->reception_time = $params['fair_zexy']['reception_time'];
@@ -628,14 +633,16 @@ class FairController extends Controller
                 if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER || $params[self::FAIR_FLG_NAME[$i]] == self::UPDATE_RECORD_REGISTERED) {
                     //更新処理で、なおかつフェア内容登録が減っている場合は余分な部分をまず削除する
                     if ($params[self::FAIR_FLG_NAME[$i]] == self::UPDATE_RECORD_REGISTERED) {
-                        $fair_content_before_update = FairContent::find($params['id'])
+                        Log::debug($params['id']);
+                        //$fair_content_before_update = FairContent::find($params['id'])
+                        $fair_content_before_update = FairContent::where('fair_id', $fairId)
                             ->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])
                             ->where('order_id', '>', count($params[self::FAIR_SITE_NAME[$i]]['fair_content']))->get();
                         for ($i = 0; $i < count($fair_content_before_update); $i++) {
                             $fair_content_before_update[$i]->delete();
                         }
                     }
-
+                    
                     //FairContentのオブジェクトを取得する
                     //新規登録
                     //if ($params[self::FAIR_FLG_NAME[$i]] == self::NEW_REGISTER) {
@@ -645,8 +652,8 @@ class FairController extends Controller
                     //    $fair_content = FairContent::find($params['id'])->where('site_type', $params[self::FAIR_SITE_NAME[$i]]['fair_content'][0]['site_type'])->first();
                     //}
 
-                    Log::debug($params[self::FAIR_FLG_NAME[$i]]);
-                    Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
+                    //Log::debug($params[self::FAIR_FLG_NAME[$i]]);
+                    //Log::debug(count($params[self::FAIR_SITE_NAME[$i]]['fair_content']));
                     $fairContents = $params[self::FAIR_SITE_NAME[$i]]['fair_content'];
 
                     //個別のフェア内容の更新処理
@@ -747,6 +754,7 @@ class FairController extends Controller
                 $fair_zexy->attention_point	= $params['fair_zexy']['attention_point'];
                 $fair_zexy->attention_point_staff = $params['fair_zexy']['attention_point_staff'];
                 $fair_zexy->attention_point_staff_job = $params['fair_zexy']['attention_point_staff_job'];
+                $fair_zexy->attention_point_image_id = $params['fair_zexy']['attention_point_image_id'];
                 $fair_zexy->question = $params['fair_zexy']['question'];
                 $fair_zexy->required_question_flg = $params['fair_zexy']['required_question_flg'];
                 $fair_zexy->reception_time = $params['fair_zexy']['reception_time'];
