@@ -333,7 +333,7 @@ class FairController extends Controller
                 $fair_zexy->required_time = $params['fair_zexy']['required_time'];
                 $fair_zexy->short_title = $params['fair_zexy']['short_title'];
                 $fair_zexy->description = $params['fair_zexy']['description'];
-                $fair_zexy->multipart_flg = $params['fair_zexy']['multipart_flg'];
+                //$fair_zexy->multipart_flg = $params['fair_zexy']['multipart_flg'];
                 $fair_zexy->place = $params['fair_zexy']['place'];
                 $fair_zexy->parking = $params['fair_zexy']['parking'];
                 $fair_zexy->target = $params['fair_zexy']['target'];
@@ -426,7 +426,7 @@ class FairController extends Controller
                 $fair_mynavi->master_id = $params['fair_mynavi']['master_id'];
                 $fair_mynavi->description = $params['fair_mynavi']['description'];
                 $fair_mynavi->reserve_way = $params['fair_mynavi']['reserve_way'];
-                $fair_mynavi->﻿multi_part_check	= $params['fair_mynavi']['multi_part_check'];
+                //$fair_mynavi->﻿multipart_check	= $params['fair_mynavi']['multipart_check'];
                 $fair_mynavi->place = $params['fair_mynavi']['place'];
                 $fair_mynavi->place_remarks = $params['fair_mynavi']['place_remarks'];
                 $fair_mynavi->place_other = $params['fair_mynavi']['place_other'];
@@ -736,7 +736,7 @@ class FairController extends Controller
                 $fair_zexy->required_time = $params['fair_zexy']['required_time'];
                 $fair_zexy->short_title = $params['fair_zexy']['short_title'];
                 $fair_zexy->description = $params['fair_zexy']['description'];
-                $fair_zexy->multipart_flg = $params['fair_zexy']['multipart_flg'];
+                //$fair_zexy->multipart_flg = $params['fair_zexy']['multipart_flg'];
                 $fair_zexy->place = $params['fair_zexy']['place'];
                 $fair_zexy->parking = $params['fair_zexy']['parking'];
                 $fair_zexy->target = $params['fair_zexy']['target'];
@@ -809,7 +809,7 @@ class FairController extends Controller
                 $fair_mynavi->master_id = $params['fair_mynavi']['master_id'];
                 $fair_mynavi->description = $params['fair_mynavi']['description'];
                 $fair_mynavi->reserve_way = $params['fair_mynavi']['reserve_way'];
-                $fair_mynavi->﻿multi_part_check	= $params['fair_mynavi']['multi_part_check'];
+                //$fair_mynavi->﻿multipart_check	= $params['fair_mynavi']['multipart_check'];
                 $fair_mynavi->place = $params['fair_mynavi']['place'];
                 $fair_mynavi->place_remarks = $params['fair_mynavi']['place_remarks'];
                 $fair_mynavi->place_other = $params['fair_mynavi']['place_other'];

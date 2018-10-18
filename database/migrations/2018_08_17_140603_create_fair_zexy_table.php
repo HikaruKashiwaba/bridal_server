@@ -19,7 +19,6 @@ class CreateFairZexyTable extends Migration
             $table->char('realtime_reserve_flg', 1)->nullable();
             $table->string('required_time', 3)->nullable();
             $table->string('description', 100)->notnull();
-            $table->char('﻿multi_part_flg', 1)->nullable();
             $table->string('place', 200)->nullable();
             $table->string('parking', 50)->nullable();
             $table->string('target', 100)->nullable();

@@ -17,7 +17,6 @@ class CreateFairMynaviTable extends Migration
             $table->integer('fair_id')->notnull();
             $table->string('description', 500);
             $table->char('reserve_way', 1);
-            $table->char('﻿multi_part_check', 1);
             $table->string('place', 200);
             $table->string('place_remarks', 500);
             $table->string('place_other', 100);

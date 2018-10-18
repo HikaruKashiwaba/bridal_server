@@ -17,6 +17,7 @@ class LoginController extends Controller
     {
         $header = $request->header('X-Api-Authorization');
         $str =  base64_decode($header);
+        Log::debug($str);
         $params = explode(":", $str);
         $member = Member::where('login_id', $params[0])->where('password', $params[1])->first();
         Log::debug($member);
