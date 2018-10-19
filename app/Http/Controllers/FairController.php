@@ -478,6 +478,7 @@ class FairController extends Controller
                 $fair_gurunavi->price = $params['fair_gurunavi']['price'];
                 $fair_gurunavi->tax_included = $params['fair_gurunavi']['tax_included'];
                 $fair_gurunavi->tax_calculation = $params['fair_gurunavi']['tax_calculation'];
+                $fair_gurunavi->keyword_text = $params['fair_gurunavi']['keyword_text'];
                 $fair_gurunavi->counsel_type = $params['fair_gurunavi']['counsel_type'];
                 $fair_gurunavi->reserve_button_flg = $params['fair_gurunavi']['reserve_button_flg'];
                 //$fair_gurunavi->reflect_status = $params['fair_gurunavi']['reflect_status'];
@@ -850,6 +851,7 @@ class FairController extends Controller
                 $fair_gurunavi->price = $params['fair_gurunavi']['price'];
                 $fair_gurunavi->tax_included = $params['fair_gurunavi']['tax_included'];
                 $fair_gurunavi->tax_calculation = $params['fair_gurunavi']['tax_calculation'];
+                $fair_gurunavi->keyword_text = $params['fair_gurunavi']['keyword_text'];
                 $fair_gurunavi->counsel_type = $params['fair_gurunavi']['counsel_type'];
                 $fair_gurunavi->reserve_button_flg = $params['fair_gurunavi']['reserve_button_flg'];
                 $fair_gurunavi->save();
