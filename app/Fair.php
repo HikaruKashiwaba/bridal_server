@@ -28,8 +28,7 @@ class Fair extends Model
     // protected $appends = ['fair_rakuten'];
     // protected $appends = ['fair_minna'];
 
-    public function member()
-    {
+    public function member() {
         return $this->belongsTo('App\Member');
     }
 
@@ -41,38 +40,31 @@ class Fair extends Model
 	    return $this->hasMany('App\FairContent');
     }
 
-    public function fairWeddingpark()
-    {
+    public function fairWeddingpark() {
         return $this->hasOne('App\FairWeddingpark');
     }
 
-    public function fairMynavi()
-    {
+    public function fairMynavi() {
         return $this->hasOne('App\FairMynavi');
     }
 
-    public function fairGurunavi()
-    {
+    public function fairGurunavi() {
         return $this->hasOne('App\FairGurunavi');
     }
 
-    public function fairRakuten()
-    {
+    public function fairRakuten() {
         return $this->hasOne('App\FairRakuten');
     }
 
-    public function fairZexy()
-    {
+    public function fairZexy() {
         return $this->hasOne('App\FairZexy');
     }
 
-    public function fairMinna()
-    {
+    public function fairMinna() {
         return $this->hasOne('App\FairMinna');
     }
 
-    public function fairEventDate()
-    {
+    public function fairEventDate() {
         return $this->hasMany('App\FairEventDate', 'fair_id');
     }
 }

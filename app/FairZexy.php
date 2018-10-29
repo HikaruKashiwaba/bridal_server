@@ -18,10 +18,10 @@ class FairZexy extends Model
     //const CREATED_AT = 'created_at';
     //const UPDATED_AT = 'updated_at';
 
-    public function fair()
-    {
+    public function fair() {
         return $this->belongsTo('App\Fair');
     }
+
     public function attentionPointImage() {
         return $this->belongsTo('App\Image', 'attention_point_image_id');
     }
