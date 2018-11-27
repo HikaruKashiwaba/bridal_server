@@ -162,7 +162,7 @@ class FairController extends Controller
             // 登録用のモデルを取得もしくは生成する
             $fair = null;
             if (!is_null($params['id'])) {
-              $fair = Fair::find($params['id']);
+                $fair = Fair::find($params['id']);
                 Log::debug("Update fair");
             }
             //新規登録の場合
@@ -511,7 +511,7 @@ class FairController extends Controller
                     $fairEventDate->stop_flg = '0';
                     $fairEventDate->del_flg = '0';
                     $fairEventDate->lock_flg = '0';
-                    $eventDate->save();
+                    $fairEventDate->save();
                 }
             }
 

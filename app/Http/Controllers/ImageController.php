@@ -12,6 +12,7 @@ class ImageController extends Controller
 {
     //画像を受け取る
     public function upload(string $memberId, Request $request) {
+        Log::debug("ImageController.upload");
         //ファイルのバリデーション
         $this->validate($request, [
             'image' => [
@@ -23,6 +24,7 @@ class ImageController extends Controller
             ]
         ]);
 
+        Log::debug("ImageController.upload");
         $file = $request->file('image');
        Log::debug($file);
 

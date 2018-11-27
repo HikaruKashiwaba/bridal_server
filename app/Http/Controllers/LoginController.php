@@ -28,29 +28,6 @@ class LoginController extends Controller
           Log::debug(['memberId' => $member->id, 'companyId' => $member->company_id]);
             return response()->json(['memberId' => $member->id, 'companyId' => $member->company_id], 200);
         }
-
-        /*
-        $member = Member::find(1);
-
-        if (is_null($member)) {
-            return response()->json(['code' => 'NG', 'message' => 'notFound'], 200);
-        } else {
-            return response()->json(['memberId' => '1'], 200);
-        }
-        */
-
-
-        //$header = $request->header('X-Api-Authorization');
-
-        //$str =  base64_decode($header);
-
-        /*
-        if (Auth::attempt(['login_id' => $id, 'password' => $pass])) {
-            //成功
-
-        } else {
-            return response()->json(['result'=>'NG'], 200);
-        }*/
     }
 
     /**
