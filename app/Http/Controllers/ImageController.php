@@ -32,7 +32,7 @@ class ImageController extends Controller
         if ($file->isValid([])) {
             //新たにランダムなファイル名を命名する
             // ぐるなびが「jpg」以外エラーになるため拡張子は固定
-            $new_file_name = uniqid() . ".jpg";
+            $new_file_name = uniqid() . ".jpeg";
             //仮のファイル置き場に移動させる
             $file->move(public_path() . "/var/tmp/fair", $new_file_name);
             //初回のみ仮のファイル置き場作成
