@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FairWeddingpark extends Model
 {
-    use SoftDeletes;
-
     protected $dates = ['deleted_at'];
     protected $table = 'fair_weddingpark';
     protected $fairContent;

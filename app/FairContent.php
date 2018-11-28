@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FairContent extends Model
 {
-    use SoftDeletes;
-
     protected $dates = ['deleted_at'];
     protected $table       = 'fair_content';
     protected $guarded = ['id', 'delete_flg', 'create_date', 'update_date'];

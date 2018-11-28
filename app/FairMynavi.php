@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FairMynavi extends Model
 {
-    use SoftDeletes;
-
     protected $dates = ['deleted_at'];
     protected $table = 'fair_mynavi';
     protected $fairContent;

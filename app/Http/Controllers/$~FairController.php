@@ -85,8 +85,8 @@ class FairController extends Controller
             if ($items[$i]['minna_flg'] == '1') {
               $items[$i]->fairMinna;
             }
-            $items[$i]->fairEventDate;
-            Log::debug($items[$i]->fairEventDate);
+            $items[$i]->fair_event_date = FairEventDate::where('fair_id', $items[$i]->id)
+                ->where('del_flg', '0')->get();
         }
         Log::debug($items[0]);
         return response()->json(['records' => $items], 200);
@@ -131,7 +131,8 @@ class FairController extends Controller
             $fair->fair_minna = FairMinna::where('fair_id', $fairId)->first();
         }
         Log::debug('開催日取得');
-        $fair->fairEventDate;
+        $fair->fair_event_date = FairEventDate::where('fair_id', $fair->id)
+            ->where('del_flg', '0')->get();
 
         Log::debug($fair);
 
@@ -630,55 +631,67 @@ class FairController extends Controller
           //フェアのフラグ更新
           $fair = Fair::where('id', $fairId)->first();
           if (!is_null($fair)) {
-              $fair->reflect_status = $params['reflect_status'];
+              $fair->reflect_status = $params['fair']['reflect_status'];
               $fair->save();
 
               //fair_zexyの更新
-              if ($fair.zexy_flg == '1') {
+              if ($fair->zexy_flg == '1') {
                   $fair_zexy = FairZexy::where('fair_id', $fairId)->first();
                   if (!is_null($fair_zexy)) {
-                      $fair_zexy->master_id = $params['fair_zexy']['master_id'];
-                      $fair_zexy->reflect_status = $params['fair_zexy']['reflect_status'];
+                      $fair_zexy->master_id = $params['fair']['fair_zexy']['master_id'];
+                      $fair_zexy->reflect_status = $params['fair']['fair_zexy']['reflect_status'];
                       $fair_zexy->save();
                   }
               }
 
               //fair_weddingparkの更新
-              if ($fair.weddingpark_flg == '1') {
+              if ($fair->weddingpark_flg == '1') {
                   $fair_weddingpark = FairWeddingPark::where('fair_id', $fairId)->first();
                   if (!is_null($fair_weddingpark)) {
-                      $fair_weddingpark->master_id = $params['fair_weddingpark']['master_id'];
-                      $fair_weddingpark->reflect_status = $params['fair_weddingpark']['reflect_status'];
+                      $fair_weddingpark->master_id = $params['fair']['fair_weddingpark']['master_id'];
+                      $fair_weddingpark->reflect_status = $params['fair']['fair_weddingpark']['reflect_status'];
                       $fair_weddingpark->save();
                   }
               }
 
               //fair_mynaviの更新
-              if ($fair.mynavi_flg == '1') {
+              if ($fair->mynavi_flg == '1') {
                   $fair_mynavi = FairMynavi::where('fair_id', $fairId)->first();
                   if (!is_null($fair_mynavi)) {
-                      $fair_mynavi->master_id = $params['fair_mynavi']['master_id'];
-                      $fair_mynavi->reflect_status = $params['fair_mynavi']['reflect_status'];
+                      $fair_mynavi->master_id = $params['fair']['fair_mynavi']['master_id'];
+                      $fair_mynavi->reflect_status = $params['fair']['fair_mynavi']['reflect_status'];
                       $fair_mynavi->save();
                   }
               }
 
               //fair_gurunaviの更新
-              if ($fair.gurunavi_flg == '1') {
+              if ($fair->gurunavi_flg == '1') {
                   $fair_gurunavi = FairGurunavi::where('fair_id', $fairId)->first();
                   if (!is_null($fair_gurunavi)) {
-                      $fair_gurunavi->reflect_status = $params['fair_gurunavi']['reflect_status'];
+                      $fair_gurunavi->reflect_status = $params['fair']['fair_gurunavi']['reflect_status'];
                       $fair_gurunavi->save();
                   }
               }
 
               //minna_flgの更新
-              if ($fair.minna_flg == '1') {
-                $fair_minna = FairMinna::where('fair_id', $fairId)->first();
-                if (!is_null($fair_minna)) {
-                    $fair_minna->reflect_status = $params['fair_minna']['reflect_status'];
-                    $fair_minna->save();
-                }
+              if ($fair->minna_flg == '1') {
+                  $fair_minna = FairMinna::where('fair_id', $fairId)->first();
+                  if (!is_null($fair_minna)) {
+                      $fair_minna->reflect_status = $params['fair']['fair_minna']['reflect_status'];
+                      $fair_minna->save();
+                  }
+              }
+
+              // フェア開催日の更新
+              $fair_event_date = $params['fair']['fair_event_date'];
+              for($i = 0; $i < count($fair_event_date); $i++) {
+                  $fairEventDate = FairEventDate::where('id', $fair_event_date[$i]['id'])->first();
+                  $fairEventDate->register_zexy_id = $fair_event_date[$i]['register_zexy_id'];
+                  $fairEventDate->register_wepa_id = $fair_event_date[$i]['register_wepa_id'];
+                  $fairEventDate->register_myavi_id = $fair_event_date[$i]['register_myavi_id'];
+                  $fairEventDate->register_gurunavi_id = $fair_event_date[$i]['register_gurunavi_id'];
+                  $fairEventDate->register_minna_id = $fair_event_date[$i]['register_minna_id'];
+                  $fairEventDate->save();
               }
           }
 
