@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FairMinna extends Model
 {
-    use SoftDeletes;
-
     protected $dates = ['deleted_at'];
     protected $table = 'fair_minna';
     protected $fairContent;

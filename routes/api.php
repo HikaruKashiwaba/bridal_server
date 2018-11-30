@@ -38,6 +38,8 @@ Route::post('fairs/{memberId}/register', 'FairController@store');
 Route::post('fairs/{memberId}/{fairId}', 'FairController@update');
 //フェア削除
 Route::delete('fair/{id}', 'FairController@deleteFairInfo');
+//一件のフェア情報取得
+Route::post('fairs/{memberId}/{fairId}/reflect', 'FairController@reflectFairInfo');
 //開催日変更
 Route::put('eventdate/{id}', 'FairController@updateCalendar');
 //アカウント登録

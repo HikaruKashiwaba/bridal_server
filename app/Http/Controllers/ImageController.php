@@ -12,6 +12,7 @@ class ImageController extends Controller
 {
     //画像を受け取る
     public function upload(string $memberId, Request $request) {
+        Log::debug("ImageController.upload");
         //ファイルのバリデーション
         $this->validate($request, [
             'image' => [
@@ -23,6 +24,7 @@ class ImageController extends Controller
             ]
         ]);
 
+        Log::debug("ImageController.upload");
         $file = $request->file('image');
        Log::debug($file);
 
@@ -30,7 +32,7 @@ class ImageController extends Controller
         if ($file->isValid([])) {
             //新たにランダムなファイル名を命名する
             // ぐるなびが「jpg」以外エラーになるため拡張子は固定
-            $new_file_name = uniqid() . ".jpg";
+            $new_file_name = uniqid() . ".jpeg";
             //仮のファイル置き場に移動させる
             $file->move(public_path() . "/var/tmp/fair", $new_file_name);
             //初回のみ仮のファイル置き場作成
