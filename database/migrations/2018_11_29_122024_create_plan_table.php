@@ -1,4 +1,4 @@
-<<?php
+<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -32,6 +32,8 @@ class CreatePlanTable extends Migration
             $table->char('gurunavi_flg', 1);
             $table->char('zexy_flg', 1);
             $table->char('minna_flg', 1);
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
     }
 

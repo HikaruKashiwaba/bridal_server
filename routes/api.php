@@ -45,6 +45,12 @@ Route::get('/account/{memberId}', 'AccountController@getAccount');
 //アカウント登録
 Route::post('/account/{memberId}', 'AccountController@updateAccount');
 
+//プラン登録
+Route::post('/plan/{memberId}/register', 'PlanController@store');
+
+//プラン登録
+Route::post('/plan/register', 'PlanController@store');
+
 Route::post('/company/info', 'AccountController@getAccountInfo');
 
 Route::post('/test', 'FairController@test');
