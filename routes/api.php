@@ -46,12 +46,10 @@ Route::put('eventdate/{id}', 'FairController@updateCalendar');
 Route::get('/account/{memberId}', 'AccountController@getAccount');
 //アカウント登録
 Route::post('/account/{memberId}', 'AccountController@updateAccount');
-
 //プラン登録
 Route::post('/plan/{memberId}/register', 'PlanController@store');
-
-//プラン登録
-Route::post('/plan/register', 'PlanController@store');
+//プラン一覧取得
+Route::get('/plan/{memberId}/list', 'PlanController@getPlanList');
 
 Route::post('/company/info', 'AccountController@getAccountInfo');
 

@@ -9,6 +9,39 @@ use Illuminate\Support\Facades\Log;
 use DB;
 
 class PlanController extends Controller {
+
+    /*  ユーザに紐づくプラン一覧を取得する*/
+    public function getPlanList(Request $request, string $memberId) {
+        $items = Plan::where('member_id', $memberId)->get();
+        for ($i = 0; $i < count($items); $i++) {
+        //     $items[$i]->image;
+        //     $items[$i]->planContent;
+        //     Log::debug($items[$i]);
+        //     if ($items[$i]['zexy_flg'] == '1') {
+        //       $items[$i]->planZexy;
+        //     }
+        //     if ($items[$i]['weddingpark_flg'] == '1') {
+        //       $items[$i]->planWeddingpark;
+        //     }
+        //     if ($items[$i]['mynavi_flg'] == '1') {
+        //       $items[$i]->planMynavi;
+        //     }
+        //     if ($items[$i]['gurunavi_flg'] == '1') {
+        //       $items[$i]->planGurunavi;
+        //     }
+        //     if ($items[$i]['rakuten_flg'] == '1') {
+        //       $items[$i]->planRakuten;
+        //     }
+        //     if ($items[$i]['minna_flg'] == '1') {
+        //       $items[$i]->planMinna;
+        //     }
+        //     $items[$i]->plan_event_date = FairEventDate::where('fair_id', $items[$i]->id)
+        //         ->where('del_flg', '0')->get();
+        }
+        Log::debug($items[0]);
+        return response()->json(['records' => $items], 200);
+    }
+
     /**
      * プラン登録
      * プラン内容の登録・更新・削除
@@ -16,7 +49,7 @@ class PlanController extends Controller {
      * @param Illuminate\Http\Request  $request
      * @return Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request, string $memberId) {
         DB::beginTransaction();
         try {
             $params = json_decode(file_get_contents('php://input'), true);
@@ -28,6 +61,8 @@ class PlanController extends Controller {
 
             $plan = new Plan;
             Log::debug($plan);
+            Log::debug($memberId);
+            $plan->member_id = $memberId;
 
             $plan->plan_name = $params['plan_name'];
             $plan->plan_title = $params['plan_title'];
@@ -49,7 +84,6 @@ class PlanController extends Controller {
 
             // パラメータに含まれるフェア内容情報を取得する
             $planContents = $params['plan_content'];
-            Log::debug($planContents);
             //新規登録
             for ($j = 0; $j < count($planContents); $j++) {
                 $planContent = $planContents[$j];

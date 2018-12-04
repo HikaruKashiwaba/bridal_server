@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plan extends Model
 {
-    use SoftDeletes;
-
     protected $table  = 'plan';
     protected $guarded = ['plan_id'];
 
