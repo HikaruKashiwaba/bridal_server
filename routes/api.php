@@ -50,6 +50,8 @@ Route::post('/account/{memberId}', 'AccountController@updateAccount');
 Route::post('/plan/{memberId}/register', 'PlanController@store');
 //プラン一覧取得
 Route::get('/plan/{memberId}/list', 'PlanController@getPlanList');
+//プラン詳細取得
+Route::get('/plan/{memberId}/{planId}/detail', 'PlanController@getPlan');
 
 Route::post('/company/info', 'AccountController@getAccountInfo');
 

@@ -107,4 +107,18 @@ class PlanController extends Controller {
         }
         return response()->json(['dummy' => 'ok'], 200);
     }
+    
+    // プラン詳細API
+    public function getPlan(string $memberId, string $planId) {
+        //Fairからユーザと各サイト登録情報を取得する
+        $plan = Plan::where('plan_id', $planId)->where('member_id', $memberId)->first();
+        Log::debug($plan);
+        Log::debug('開催日取得');
+        return response()->json(['plan' => $plan], 200);
+    }
+    
+    /* 「停止する」ボタン押下からのフェア削除処理  */
+    public function deleteFairInfo(string $planId) {
+
+    }
 }
