@@ -52,6 +52,8 @@ Route::post('/plan/{memberId}/register', 'PlanController@store');
 Route::get('/plan/{memberId}/list', 'PlanController@getPlanList');
 //プラン詳細取得
 Route::get('/plan/{memberId}/{planId}/detail', 'PlanController@getPlan');
+//プラン更新取得
+Route::post('/plan/{memberId}/{planId}/update', 'PlanController@update');
 
 Route::post('/company/info', 'AccountController@getAccountInfo');
 

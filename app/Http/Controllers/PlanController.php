@@ -10,6 +10,12 @@ use DB;
 
 class PlanController extends Controller {
 
+    const NO_REGISTRATION = '0';
+    const REGISTERED = '1';
+    const NEW_REGISTER = '1';
+    const UPDATE = '2';
+    const DELETED = '3';
+
     /*  ユーザに紐づくプラン一覧を取得する*/
     public function getPlanList(Request $request, string $memberId) {
         $items = Plan::where('member_id', $memberId)->get();
@@ -35,7 +41,7 @@ class PlanController extends Controller {
         //     if ($items[$i]['minna_flg'] == '1') {
         //       $items[$i]->planMinna;
         //     }
-        //     $items[$i]->plan_event_date = FairEventDate::where('fair_id', $items[$i]->id)
+        //     $items[$i]->plan_event_date = planEventDate::where('plan_id', $items[$i]->id)
         //         ->where('del_flg', '0')->get();
         }
         Log::debug($items[0]);
@@ -82,7 +88,7 @@ class PlanController extends Controller {
             $plan->minna_flg = $params['minna_flg'];
             $plan->save();
 
-            // パラメータに含まれるフェア内容情報を取得する
+            // パラメータに含まれるプラン内容情報を取得する
             $planContents = $params['plan_content'];
             //新規登録
             for ($j = 0; $j < count($planContents); $j++) {
@@ -93,6 +99,19 @@ class PlanController extends Controller {
                 $plan_content->privilege_text = $planContent['privilege_text'];
                 $plan_content->save();
             }
+                //プラン内容の新規登録、もしくは更新の場合
+                if ($params[self::plan_FLG[$i]] == self::UPDATE) {
+                    $planContents = $params[self::plan_TABLE_NAME[$i]]['plan_content'];
+                    //個別のプラン内容の更新処理
+                    for ($j = 0; $j < count($planContents); $j++) {
+                        //新規登録
+                        $plan_content = Plan::firstOrNew([
+                            'plan_id' => $plan['plan_id'],
+                        ]);
+                        Log::debug($plan);
+                    }
+                }
+            $plan->save();
             $result = [
                 'code' => 'OK',
                 'message' => ''
@@ -110,15 +129,55 @@ class PlanController extends Controller {
     
     // プラン詳細API
     public function getPlan(string $memberId, string $planId) {
-        //Fairからユーザと各サイト登録情報を取得する
+        //planからユーザと各サイト登録情報を取得する
         $plan = Plan::where('plan_id', $planId)->where('member_id', $memberId)->first();
         Log::debug($plan);
         Log::debug('開催日取得');
         return response()->json(['plan' => $plan], 200);
     }
     
-    /* 「停止する」ボタン押下からのフェア削除処理  */
-    public function deleteFairInfo(string $planId) {
+//     /* 「停止する」ボタン押下からのフェア削除処理  */
+//     public function deleteplanInfo(string $planId) {
+// 　  
+//     }
 
+    /**
+     * フェア登録
+     * フェア内容の登録・更新・削除
+     *
+     * @param Illuminate\Http\Request  $request
+     * @return Illuminate\Http\Response
+     */
+    public function update(string $memberId, string $planId, Request $request) {
+        DB::beginTransaction();
+        try {
+            $params = json_decode(file_get_contents('php://input'), true);
+            Log::debug('update-->');
+            //プランの更新
+            $plan = Plan::where('plan_id', $planId)->first();
+            Log::debug($plan);
+            $plan->plan_name = $params['plan_name'];
+            $plan->plan_title = $params['plan_title'];
+            $plan->plan_detail = $params['plan_detail'];
+            $plan->price = $params['price'];
+            $plan->remarks = $params['remarks'];
+            $plan->number_people = $params['number_people'];
+            $plan->plus_one = $params['plus_one'];
+            $plan->minus_one = $params['minus_one'];
+            $plan->published_start = $params['published_start'];
+            $plan->published_end = $params['published_end'];
+            $plan->style = $params['style'];
+            Log::debug($plan->style);
+            $plan->save();
+            Log::debug($plan);
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            $result = [
+                'code' => 'NG',
+                'message' => $e->getMessage()
+            ];
+        }
+        return response()->json(['dummy' => 'ok'], 200);
     }
 }
