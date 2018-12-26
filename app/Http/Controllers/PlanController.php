@@ -94,23 +94,13 @@ class PlanController extends Controller {
             for ($j = 0; $j < count($planContents); $j++) {
                 $planContent = $planContents[$j];
                 $plan_content = new PlanContent;
+                $plan_content->plan_id = $plan->plan_id;
+                Log::debug($plan->plan_id);
                 $plan_content->order_id = $planContent['order_id'];
                 $plan_content->check_box = $planContent['check_box'];
                 $plan_content->privilege_text = $planContent['privilege_text'];
                 $plan_content->save();
             }
-                //プラン内容の新規登録、もしくは更新の場合
-                if ($params[self::plan_FLG[$i]] == self::UPDATE) {
-                    $planContents = $params[self::plan_TABLE_NAME[$i]]['plan_content'];
-                    //個別のプラン内容の更新処理
-                    for ($j = 0; $j < count($planContents); $j++) {
-                        //新規登録
-                        $plan_content = Plan::firstOrNew([
-                            'plan_id' => $plan['plan_id'],
-                        ]);
-                        Log::debug($plan);
-                    }
-                }
             $plan->save();
             $result = [
                 'code' => 'OK',
@@ -136,11 +126,6 @@ class PlanController extends Controller {
         return response()->json(['plan' => $plan], 200);
     }
     
-//     /* 「停止する」ボタン押下からのフェア削除処理  */
-//     public function deleteplanInfo(string $planId) {
-// 　  
-//     }
-
     /**
      * フェア登録
      * フェア内容の登録・更新・削除
@@ -167,10 +152,24 @@ class PlanController extends Controller {
             $plan->published_start = $params['published_start'];
             $plan->published_end = $params['published_end'];
             $plan->style = $params['style'];
-            Log::debug($plan->style);
             $plan->save();
-            Log::debug($plan);
+            DB::commit();
+        } catch(Exception $e) {
+            DB::rollBack();
+            $result = [
+                'code' => 'NG',
+                'message' => $e->getMessage()
+            ];
+        }
+        return response()->json(['dummy' => 'ok'], 200);
+    }
 
+    public function delete(string $planId, Request $request) {
+        try {
+            $plan = Plan::where('plan_id', $planId)->first();
+            Log::debug($plan);
+            $plan->delete();
+            DB::commit();
         } catch(Exception $e) {
             DB::rollBack();
             $result = [

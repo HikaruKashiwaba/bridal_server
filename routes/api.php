@@ -52,8 +52,10 @@ Route::post('/plan/{memberId}/register', 'PlanController@store');
 Route::get('/plan/{memberId}/list', 'PlanController@getPlanList');
 //プラン詳細取得
 Route::get('/plan/{memberId}/{planId}/detail', 'PlanController@getPlan');
-//プラン更新取得
+//プラン更新
 Route::post('/plan/{memberId}/{planId}/update', 'PlanController@update');
+//プラン削除
+Route::post('/plan/{planId}/delete', 'PlanController@delete');
 
 Route::post('/company/info', 'AccountController@getAccountInfo');
 

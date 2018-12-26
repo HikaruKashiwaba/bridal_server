@@ -14,7 +14,8 @@ class CreatePlanContentTable extends Migration
     public function up()
     {
         Schema::create('plan_content', function (Blueprint $table) {
-            $table->increments('plan_id');
+            $table->increments('id');
+            $table->integer('plan_id');
             $table->integer('order_id');
             $table->integer('check_box');
             $table->string('privilege_text');

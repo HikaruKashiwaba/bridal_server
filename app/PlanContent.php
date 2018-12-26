@@ -10,7 +10,8 @@ class PlanContent extends Model
     use SoftDeletes;
 
     protected $table  = 'plan_content';
-    protected $guarded = ['plan_id'];
+    protected $guarded = ['id'];
+    protected $primaryKey = 'id';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
