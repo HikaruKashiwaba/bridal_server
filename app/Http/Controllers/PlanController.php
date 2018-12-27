@@ -167,8 +167,13 @@ class PlanController extends Controller {
     public function delete(string $planId, Request $request) {
         try {
             $plan = Plan::where('plan_id', $planId)->first();
+            $plan_contents = PlanContent::where('plan_id', $planId)->get();
             Log::debug($plan);
+            Log::debug($plan_contents);
             $plan->delete();
+            foreach ($plan_contents as $plan_content) {
+                $plan_content->delete();
+            }
             DB::commit();
         } catch(Exception $e) {
             DB::rollBack();
