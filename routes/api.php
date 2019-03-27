@@ -85,6 +85,8 @@ Route::post('/event/fair/{memberId}', 'EventDateController@updateFairEventDate')
 
 Route::get('/holiday', 'EventDateController@getHoliday');
 
+Route::post('/errorLog', 'ErrorLogController@register');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
