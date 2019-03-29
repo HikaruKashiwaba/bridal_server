@@ -32,7 +32,7 @@ class ImageController extends Controller
         if ($file->isValid([])) {
             //新たにランダムなファイル名を命名する
             // ぐるなびが「jpg」以外エラーになるため拡張子は固定
-            $new_file_name = uniqid() . ".jpeg";
+            $new_file_name = uniqid() . ".jpg";
             //仮のファイル置き場に移動させる
             $file->move(public_path() . "/var/tmp/fair", $new_file_name);
             //初回のみ仮のファイル置き場作成
@@ -79,6 +79,15 @@ class ImageController extends Controller
         for ($i = 0; $i < $count; $i++) {
             $rec = $image_all[$i];
             $rec['fair_count'] = $image_all[$i]->fairs()->count();
+            Log::debug('参照フェア数：'.$rec['fair_count']);
+            $rec['contents'] = '';
+            $token = '';
+
+            foreach ($image_all[$i]->fairs as $localFair) {
+              Log::debug($localFair->title);
+              $rec['contents'] = $rec['contents'].$token.$localFair->title;
+              $token = ', ';
+            }
 
             $referCount = $image_all[$i]->fairContents()->count() + $image_all[$i]->fairContents2()->count() + $image_all[$i]->fairContents3()->count();
             $rec['fair_content_count'] = $referCount;
